@@ -1,0 +1,37 @@
+$git config --global user.name "John Doe"
+$git config --global user.email johndoe@example.com
+
+
+$git config --list
+
+user.name=John Doe
+user.email=johndoe@example.com
+color.status=auto
+color.branch=auto
+color.interactive=auto
+color.diff=auto
+
+$ git help <verb>
+$ man git-<verb>
+$ git help config
+
+$ cd /c/user/my_project
+$ git init
+$ git add *.c
+$ git add LICENSE
+$ git commit -m 'initial project version'
+$ git clone https://github.com/libgit2/libgit2
+$ git clone https://github.com/libgit2/libgit2 mylibgit
+$ git status
+$ git add README
+$ git commit
+$ git commit -m "Story 182: Fix benchmarks for speed"
+$ rm PROJECTS.md
+$ git push -u origin master   |Or| git push -f origin master
+
+git clone https://github.com/USERNAME/REPOSITORY.git
+git fetch remotename
+git merge remotename/branchname
+git pull remotename branchname \\ to update your current project # Grabs online updates and merges them with your local work
+
+
