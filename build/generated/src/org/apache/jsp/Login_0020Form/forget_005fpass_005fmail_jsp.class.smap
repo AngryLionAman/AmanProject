@@ -1,0 +1,13 @@
+SMAP
+forget_005fpass_005fmail_jsp.java
+JSP
+*S JSP
+*F
++ 0 forget_pass_mail.jsp
+Login Form/forget_pass_mail.jsp
+*L
+1,5:47
+9,106:55
+114,6:161
+120:167,3
+*E

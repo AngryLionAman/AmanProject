@@ -30,29 +30,22 @@ public class SendMail extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-           Class.forName("com.mysql.jdbc.Driver");
-           Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/jobclues","root",null);
-           Statement stmt=con.createStatement();
-           String id=(String)session.getAttribute("n1");
-           ResultSet rs=stmt.executeQuery("select * from jreg where id='"+id+"' ");
-           while(rs.next()){
-               username=rs.getString(6);//Full Name
-               to=rs.getString(4);//Mail id where mail will send
+         
+               to=(String)session.getAttribute("n2");
+           
                String subject="Warning from JobClues";
-               String msg1="Hello  "+username+",";
+               String msg1="Hello  "+to+",";
                String msg2="This message is about to inform you that , We found some illegal content"
                        + " or unauthorise operations from your side.If this will happen again then you might be block"
                        + " or removed form this site."+"\n\n Thanks for visiting JobClues";
                String msg=msg1+"\n"+msg2;
                Mailer.send(to, subject, msg);
                out.print("<br><br><h3>Mail has been sent successfully to Your<br>registered email</h3>");    
-           }
-            stmt.close();
-            con.close();
-            response.sendRedirect("job_main/first_page.jsp");
+          
+            //response.sendRedirect("job_main/first_page.jsp");
        } catch(Exception e)
     {
-    out.print("We are Sorry to having this problem.please check you net connection"+e);
+    out.print("We are Sorry to having this problem.please check you net connection"+e+"agian");
     }
         finally {            
             out.close();

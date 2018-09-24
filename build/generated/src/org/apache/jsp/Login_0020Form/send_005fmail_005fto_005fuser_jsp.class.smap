@@ -1,0 +1,12 @@
+SMAP
+send_005fmail_005fto_005fuser_jsp.java
+JSP
+*S JSP
+*F
++ 0 send_mail_to_user.jsp
+Login Form/send_mail_to_user.jsp
+*L
+1,2:45
+4,15:48
+18,4:63
+*E

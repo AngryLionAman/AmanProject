@@ -52,7 +52,7 @@
 
     props.put("mail.password", pass);
 
-    props.put("mail.port", "25");
+    props.put("mail.port", "587");
 
  
 
@@ -84,9 +84,7 @@
 
         // Set To: header field of the header.
 
-        message.addRecipient(Message.RecipientType.TO,
-
-                new InternetAddress(to));
+        message.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
 
         // Set Subject: header field
 

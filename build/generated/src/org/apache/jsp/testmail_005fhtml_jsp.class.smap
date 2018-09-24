@@ -1,0 +1,10 @@
+SMAP
+testmail_005fhtml_jsp.java
+JSP
+*S JSP
+*F
++ 0 testmail_html.jsp
+testmail_html.jsp
+*L
+2,43:44
+*E
