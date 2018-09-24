@@ -1,0 +1,15 @@
+SMAP
+newjsp_005fmail_jsp.java
+JSP
+*S JSP
+*F
++ 0 newjsp_mail.jsp
+Login Form/newjsp_mail.jsp
+*L
+2,73:52
+74,2:125
+76:127,3
+77:130
+78:131,3
+79,10:134
+*E
