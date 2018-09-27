@@ -35,7 +35,8 @@
    froma="cse13302.sbit@gmail.com";
    password="alokankit";
    out.println(froma+password);
-   to="cse13302.sbit@gmail.com";
+   to = mailid;
+   //to="cse13302.sbit@gmail.com";
   if(mailid==null || password==null || feedback==null) {
 	  out.println("ENTER THE ALL FIELDS");
           out.println("print 2");
