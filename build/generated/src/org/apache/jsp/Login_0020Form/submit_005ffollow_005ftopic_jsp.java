@@ -1,11 +1,11 @@
-package org.apache.jsp.Testing;
+package org.apache.jsp.Login_0020Form;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import java.sql.*;
 
-public final class hello_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class submit_005ffollow_005ftopic_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
@@ -42,37 +42,35 @@ public final class hello_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write("\n");
-      out.write("    \n");
+      out.write("       \n");
+      out.write("        \n");
+      out.write("        ");
 
- 
-Statement stmt;
-Connection con;
-ResultSet rs;
-
-try{
+          Statement st1;
+          
+          Connection cn;
+          ResultSet rs;        
+        String topic_id=request.getParameter("val_topic");
+        String followers_id=request.getParameter("val2_topic");
+          
+try
+{
 Class.forName("com.mysql.jdbc.Driver");
-con=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
-stmt=con.createStatement();
-String v="select count(*) from like_count";
-rs=stmt.executeQuery(v);
+cn=DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat","root",null);
 
-int count_var=0;
-while(rs.next())
+st1=cn.createStatement();
+String p="insert into topic_followers_detail(topic_id,user_or_followers_id) values('"+topic_id+"','"+followers_id+"')";
+st1.execute(p);
+st1.close();
+cn.close();
+out.println("Operation Successfull");
+}
+catch(Exception e1)
 {
-    count_var =rs.getInt("count(*)");
-    out.println(count_var);
-    
+    out.print("Error:-"+e1);
 }
 
-stmt.close();
-con.close();
-}
-catch(Exception e)
-{
-out.println(e.getMessage());
-}
-
+      out.write('\n');
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;

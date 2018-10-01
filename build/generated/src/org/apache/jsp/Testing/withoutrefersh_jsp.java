@@ -43,15 +43,19 @@ public final class withoutrefersh_jsp extends org.apache.jasper.runtime.HttpJspB
 
       out.write("<html>\n");
       out.write("<body>\n");
-      out.write("\n");
-      out.write("<h1>Testing of jsp page reloading</h1>\n");
-      out.write("<center>\n");
-      out.write("<form>\n");
-      out.write("    Name:<input typr=\"text\" name=\"name\">\n");
-      out.write("    <br>\n");
-      out.write("    <input type=\"botton\" value=\"submit\">\n");
+      out.write("<script type=\"text/javascript\">\n");
       out.write("    \n");
-      out.write("</form>\n");
+      out.write("    function take_value(firstname,lastname){\n");
+      out.write("        document.getElementById(\"demo\").innerHTML = \"Welcome\" + firstname+lastname;\n");
+      out.write("      \n");
+      out.write("    }\n");
+      out.write("    \n");
+      out.write("    \n");
+      out.write("</script>\n");
+      out.write("<center>\n");
+      out.write("    <p> Check this out</p>\n");
+      out.write("    <button onclick=\"take_value('aman','kumar')\">Click this</button>\n");
+      out.write("    <p id=\"demo\">\n");
       out.write("    </center>\n");
       out.write("\n");
       out.write("\n");

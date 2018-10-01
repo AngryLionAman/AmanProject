@@ -169,6 +169,25 @@ ul.a {
     }
 }
 </style>
+<script type="text/javascript">
+    
+    function take_value(question_id,id_of_user){
+        //document.getElementById("demo").innerHTML = "Welcome" + firstname+lastname;
+               
+      var http = new XMLHttpRequest();
+      http.open("POST", "http://localhost:8081/Bharat.com/Login%20Form/like_count.jsp?val="+question_id+"&val2="+id_of_user, true);
+      http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      http.send();
+        
+    http.onload = function() {
+        http.responseText;
+        //alert(http.responseText);
+    }
+      
+    }
+    
+    
+</script>
 <script>
 document.getElementsByClassName("tablink")[0].click();
 
@@ -244,16 +263,7 @@ window.onclick = function(event) {
     <h2>Feeds</h2>
     
 	<ul class="a">
-          <a href=""><li>Top Stories</li></a>
-           <a href=""><li>Bookmarked Answered</li></a>
-           <a href=""><li>Links</li></a>
-		    <a href=""><li>Topic You Choosen</li></a>
-			 <a href=""><li>Education</li></a>
-			  <a href=""><li>Health</li></a>
-    </ul>
-  </div>
-  <div class="column middle">
-      <%@page language="java" %>
+<%@page language="java" %>
 <%@page import="java.sql.*" %> 
 <%
     String email=(String)session.getAttribute("email");
@@ -261,7 +271,7 @@ window.onclick = function(event) {
  Connection con;
  ResultSet rs;
  String name=null;
- int id;       
+ int id_of_user=0;       
 
  try {
          
@@ -273,23 +283,50 @@ window.onclick = function(event) {
      String p =  "SELECT * FROM newuser WHERE email = '"+email+"'";
      rs = stmt.executeQuery(p);
              while (rs.next()) {
-              id=rs.getInt("id");
+              id_of_user=rs.getInt("id");
               name = rs.getString("firstname");
              }
- 
-%>
-          
-<h2>Welcome <%=name%></h2>
-
-<%
-        //session.setAttribute("name", name);
  stmt.close();
             con.close();
               } 
         catch (Exception e) {
-            System.out.println("Unable to retrieve!!");
+            out.println("Unable to retrieve!!");
         } 
      %>
+<%
+ Statement stmt_fetch_topic;
+ Connection con_fetch_topic;
+ ResultSet rs_fetch_topic;
+ String topic_name;
+  try {
+         
+     Class.forName("com.mysql.jdbc.Driver");
+     con_fetch_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
+            
+     stmt_fetch_topic = con_fetch_topic.createStatement();
+         
+     String p_fetch_topic =  "select topic_name from topic t right join topic_followers_detail de on t.unique_id = de.topic_id where user_or_followers_id= '"+id_of_user+"'";
+     rs_fetch_topic = stmt_fetch_topic.executeQuery(p_fetch_topic);
+             while (rs_fetch_topic.next()) {
+              topic_name=rs_fetch_topic.getString("topic_name");
+              out.println("<a href=><li>"+topic_name+"</li></a>");
+                           }
+ stmt_fetch_topic.close();
+            con_fetch_topic.close();
+              } 
+        catch (Exception e) {
+            out.println("Unable to retrieve!!");
+        } 
+     %>
+          <a href=""><li>This is for Example</li></a>
+        </ul>
+  </div>
+  <div class="column middle">
+
+          
+<h2>Welcome <%=name%></h2>
+
+
      
 
       
@@ -358,6 +395,7 @@ window.onclick = function(event) {
              while (rs1.next()) {
               question = rs1.getString("question");
               ide = rs1.getInt("id");
+              int question_id = rs1.getInt("q_id");
                             stmt2 = con1.createStatement();
                             String T =  "SELECT firstname FROM newuser WHERE id='"+ide+"' ";
                              rs2 = stmt2.executeQuery(T);
@@ -376,10 +414,46 @@ window.onclick = function(event) {
                                   %>
                                      <b><a href="Answer.jsp?Id=<%=rs1.getString("question")%>" >Answer</a></b>
                                   <%
-                                       out.println("&nbsp;&nbsp;");
-                                       out.println("<b><a href= >Upvote</a></b>");
-                                       out.println("&nbsp;&nbsp;");
-                                       out.println("<b><a href= >Share</a></b>");
+                                       out.println("&nbsp;&nbsp;");%>
+                                       
+                                       <%
+                                       
+                                       
+Statement stmt_count;
+Connection con_count;
+ResultSet rs_count;
+int count_var=0;
+
+try{
+Class.forName("com.mysql.jdbc.Driver");
+con_count=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
+stmt_count=con_count.createStatement();
+String v_count="select count(*) from like_count where Ans_id='"+question_id+"'";
+rs_count=stmt_count.executeQuery(v_count);
+
+
+while(rs_count.next())
+{
+    count_var =rs_count.getInt("count(*)");
+    //out.println(rs_count.getInt("count(*)"));
+    
+}
+
+stmt_count.close();
+con_count.close();
+}
+catch(Exception e)
+{
+out.println(e.getMessage());
+}
+                                       
+                                       
+                                       %>
+                                       
+                                       
+                                       <button onclick="take_value('<%=question_id%>','<%=id_of_user%>')">UpVote[<%=count_var%>]</button><p id="demo"></p>
+                                       <% out.println("&nbsp;&nbsp;");
+                                       //out.println("<b><a href= >Share</a></b>");
                                        out.println("</div>");
                                        
                                                   }
@@ -400,7 +474,7 @@ con1.close();
     <h2>Set up account</h2>
     <ul class="a">
           <a href=""><li>Visit your feed</li></a>
-           <a href=""><li>Follow 4 more Topic</li></a>
+           <a href="Topic_Follow.jsp"><li>Follow more Topic</li></a>
            <a href=""><li>Find Your friend on bharat.com</li></a>
 		    <a href=""><li>Ask your first question</li></a>
 			 <a href=""><li>Answer a Question</li></a>

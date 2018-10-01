@@ -213,6 +213,25 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    }\n");
       out.write("}\n");
       out.write("</style>\n");
+      out.write("<script type=\"text/javascript\">\n");
+      out.write("    \n");
+      out.write("    function take_value(question_id,id_of_user){\n");
+      out.write("        //document.getElementById(\"demo\").innerHTML = \"Welcome\" + firstname+lastname;\n");
+      out.write("               \n");
+      out.write("      var http = new XMLHttpRequest();\n");
+      out.write("      http.open(\"POST\", \"http://localhost:8081/Bharat.com/Login%20Form/like_count.jsp?val=\"+question_id+\"&val2=\"+id_of_user, true);\n");
+      out.write("      http.setRequestHeader(\"Content-type\",\"application/x-www-form-urlencoded\");\n");
+      out.write("      http.send();\n");
+      out.write("        \n");
+      out.write("    http.onload = function() {\n");
+      out.write("        http.responseText;\n");
+      out.write("        //alert(http.responseText);\n");
+      out.write("    }\n");
+      out.write("      \n");
+      out.write("    }\n");
+      out.write("    \n");
+      out.write("    \n");
+      out.write("</script>\n");
       out.write("<script>\n");
       out.write("document.getElementsByClassName(\"tablink\")[0].click();\n");
       out.write("\n");
@@ -263,7 +282,7 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("  <a href=\"#\">Ansewer</a>\n");
       out.write("  <a href=\"#\">Nodification</a>\n");
       out.write("  \n");
-      out.write("  <form class=\"example\" action=\"/action_page.php\" style=\"margin:auto;max-width:300px\">\n");
+      out.write("  <form class=\"example\" action=\"action_page.jsp\" style=\"margin:auto;max-width:300px\">\n");
       out.write("  <input type=\"text\" placeholder=\"Search..\" name=\"search2\">\n");
       out.write("   <button type=\"submit\"><i class=\"fa fa-search\"></i></button>\n");
       out.write("</form>\n");
@@ -271,7 +290,7 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("<div class=\"dropdown\">\n");
       out.write("<button onclick=\"myFunction()\" class=\"dropbtn\">Dropdown</button>\n");
       out.write("  <div id=\"myDropdown\" class=\"dropdown-content\">\n");
-      out.write("    <a href=\"#home\">Profile</a>\n");
+      out.write("    <a href=\"UserProfile.jsp\">Profile</a>\n");
       out.write("    <a href=\"Logout.jsp\">Logout</a>\n");
       out.write("    <a href=\"#about\">Blog</a>\n");
       out.write("    <a href=\"#contact\">Message</a>\n");
@@ -305,7 +324,7 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
  Connection con;
  ResultSet rs;
  String name=null;
- int id;       
+ int id_of_user=0;       
 
  try {
          
@@ -317,7 +336,7 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
      String p =  "SELECT * FROM newuser WHERE email = '"+email+"'";
      rs = stmt.executeQuery(p);
              while (rs.next()) {
-              id=rs.getInt("id");
+              id_of_user=rs.getInt("id");
               name = rs.getString("firstname");
              }
  
@@ -387,45 +406,107 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("</div>\n");
       out.write("\n");
       out.write("</div>\n");
-      out.write("\t</div><br>\n");
+      out.write("</div><br>\n");
       out.write("        ");
 
-   // String email=(String)session.getAttribute("email");
- Statement stmt1;
+  Statement stmt1,stmt2=null;
  Connection con1;
- ResultSet rs1;
+ ResultSet rs1,rs2;
  String name1=null;
- String question;      
+ String question,fname=null; 
+ int ide=0; 
 
  try {
          
      Class.forName("com.mysql.jdbc.Driver");
-     con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
-     stmt1 = con1.createStatement();
-         
+     con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);         
+     stmt1 = con1.createStatement();     
      String q =  "SELECT * FROM question ";
      rs1 = stmt1.executeQuery(q);
              while (rs1.next()) {
               question = rs1.getString("question");
-              
+              ide = rs1.getInt("id");
+              int question_id = rs1.getInt("q_id");
+                            stmt2 = con1.createStatement();
+                            String T =  "SELECT firstname FROM newuser WHERE id='"+ide+"' ";
+                             rs2 = stmt2.executeQuery(T);
+                              while (rs2.next()) {
+                                       fname = rs2.getString("firstname");
+                                       out.println("<div class=div1>");
+                                       out.println(question);
+                                       out.println("&nbsp;");
+                                       out.println("BY");
+                                       out.println("&nbsp;");
+                                       out.println(fname);
+                                       out.println("<br>");
+                                       out.println("<br>");
+                                       out.println("<br>");
+                                       out.println("&nbsp;");
+                                  
       out.write("\n");
-      out.write("             <div class=\"div1\">");
-      out.print(question);
-      out.write("</div>\n");
-      out.write("             ");
+      out.write("                                     <b><a href=\"Answer.jsp?Id=");
+      out.print(rs1.getString("question"));
+      out.write("\" >Answer</a></b>\n");
+      out.write("                                  ");
 
-             }
- 
-
+                                       out.println("&nbsp;&nbsp;");
       out.write("\n");
-      out.write("          \n");
-      out.write("        \n");
-      out.write("        ");
+      out.write("                                       \n");
+      out.write("                                       ");
 
-        //session.setAttribute("name", name);
- stmt1.close();
-            con1.close();
+                                       
+                                       
+Statement stmt_count;
+Connection con_count;
+ResultSet rs_count;
+int count_var=0;
+
+try{
+Class.forName("com.mysql.jdbc.Driver");
+con_count=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
+stmt_count=con_count.createStatement();
+String v_count="select count(*) from like_count where Ans_id='"+question_id+"'";
+rs_count=stmt_count.executeQuery(v_count);
+
+
+while(rs_count.next())
+{
+    count_var =rs_count.getInt("count(*)");
+    //out.println(rs_count.getInt("count(*)"));
+    
+}
+
+stmt_count.close();
+con_count.close();
+}
+catch(Exception e)
+{
+out.println(e.getMessage());
+}
+                                       
+                                       
+                                       
+      out.write("\n");
+      out.write("                                       \n");
+      out.write("                                       \n");
+      out.write("                                       <button onclick=\"take_value('");
+      out.print(question_id);
+      out.write("','");
+      out.print(id_of_user);
+      out.write("')\">UpVote[");
+      out.print(count_var);
+      out.write("]</button><p id=\"demo\"></p>\n");
+      out.write("                                       ");
+ out.println("&nbsp;&nbsp;");
+                                       //out.println("<b><a href= >Share</a></b>");
+                                       out.println("</div>");
+                                       
+                                                  }
+                                }
+
+stmt1.close();
+stmt2.close();
+con1.close();
               } 
         catch (Exception e) {
             System.out.println("Unable to retrieve!!");

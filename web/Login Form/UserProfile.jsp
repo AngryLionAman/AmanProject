@@ -418,11 +418,6 @@ stmt_a2.close();
 stmt_a.close();
 con_a.close();
 }
-
-
-
-
-
 }
 catch(Exception e)
 {
