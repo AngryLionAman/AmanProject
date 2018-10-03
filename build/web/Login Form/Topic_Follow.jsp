@@ -317,13 +317,12 @@ window.onclick = function(event) {
             con.close();
               } 
         catch (Exception e) {
-            out.println("Unable to retrieve!!");
+            out.println("Unable to retrieve!!"+e);
         } 
      %>
      
 
-      
-<%
+      <%
    
  Statement stmt_topic;
  Connection con_topic;
@@ -334,36 +333,68 @@ window.onclick = function(event) {
          
      Class.forName("com.mysql.jdbc.Driver");
      con_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
+     
      stmt_topic = con_topic.createStatement();
-         
      String p_topic =  "SELECT * FROM topic";
      rs_topic = stmt_topic.executeQuery(p_topic);
+     
+      
+      
      %>
-<table style="width:100%">
-  <tr>
-      <th>Topic Id</th>
-    <th>Topic name</th>
-    <th>Action</th> 
-  </tr>
-<%
+
+     
+<% int i = 1;
+String Status=null;
              while (rs_topic.next()) {
               int topic_id = rs_topic.getInt("unique_id");
               name_topic=rs_topic.getString("topic_name");
-              out.println("<tr>");
-              out.println("<td>"+topic_id+"</td>");
-              out.println("<td>"+name_topic+"</td>"); %>
-             <td><button onclick="take_value('<%=topic_id%>','<%=id_of_user%>')">Follow[]</button><p id="demo"></p></td>
-              <% out.println("</tr>");
+              
+              out.println("<br>"+topic_id);
+              out.println(name_topic); %>   
+             
+              <%
+                  Statement stmt_topic_followers;
+                  Connection con_topic_followers;
+                  ResultSet rs_topic_followers;
+                  stmt_topic_followers = con_topic.createStatement();
+                  String topic_followers = "SELECT * FROM topic_followers_detail";
+                  rs_topic_followers = stmt_topic_followers.executeQuery(topic_followers);
+     
+              while (rs_topic_followers.next()){
+                  int f_topic_id = rs_topic_followers.getInt("topic_id");
+                  int f_followers_id = rs_topic_followers.getInt("user_or_followers_id");
+                  
+                  if((f_topic_id == topic_id) && (f_followers_id == id_of_user )){
+                      Status = "present";
+                  }
+                  
+                  //out.println("["+ i++ +"]"+"("+f_topic_id+","+topic_id+")_("+f_followers_id+","+id_of_user+")<br>");
+              }
+              %>
+              <%
+              if(Status == "present")
+                        out.println("<td><button>Followed</button></td><br>");
+            else{ %>
+                         <td><button onclick="take_value('<%=topic_id%>','<%=id_of_user%>')">Follow</button><p id="demo"></p></td>
+              <% }
+            Status=null;
+              %>
+              
+              
+              
+             
+             <% 
              }
-             out.println("</table>");
+             
  stmt_topic.close();
+ //stmt_topic_followers.close();
             con_topic.close();
               } 
         catch (Exception e) {
-            out.println("Unable to retrieve!!");
+            out.println("Unable to retrieve!!="+e);
         } 
      %>
+
     
      <br>
   </div>
