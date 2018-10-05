@@ -178,23 +178,6 @@ th, td {
     text-align: left;    
 }
 </style>
-<script type="text/javascript">
-    
-    function take_value(topic_id,id_of_user){
-        //document.getElementById("demo").innerHTML = "Welcome" + topic_id+id_of_user;
-        
-         var http = new XMLHttpRequest();
-      http.open("POST", "http://localhost:8081/Bharat.com/Login%20Form/submit_follow_topic.jsp?val_topic="+topic_id+"&val2_topic="+id_of_user, true);
-      http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-      http.send();
-        
-      http.onload = function() {
-        http.responseText;
-        //alert(http.responseText);
-    }
-  }  
-</script>
-
 <script>
 document.getElementsByClassName("tablink")[0].click();
 
@@ -267,18 +250,9 @@ window.onclick = function(event) {
 
 <div class="row">
   <div class="column side">
-    <h2>Feeds</h2>
+    <h2>Followed Topic</h2>
     
 	<ul class="a">
-          <a href=""><li>Top Stories</li></a>
-           <a href=""><li>Bookmarked Answered</li></a>
-           <a href=""><li>Links</li></a>
-		    <a href=""><li>Topic You Choosen</li></a>
-			 <a href=""><li>Education</li></a>
-			  <a href=""><li>Health</li></a>
-    </ul>
-  </div>
-  <div class="column middle">
 <%@page language="java" %>
 <%@page import="java.sql.*" %> 
 <%
@@ -286,97 +260,68 @@ window.onclick = function(event) {
  Statement stmt;
  Connection con;
  ResultSet rs;
- String name    = null;
- int id_of_user = 0;       
+ String name=null;
+ int id_of_user=0;       
 
  try {
          
      Class.forName("com.mysql.jdbc.Driver");
-     con  = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);     
+     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
+            
      stmt = con.createStatement();
+         
      String p =  "SELECT * FROM newuser WHERE email = '"+email+"'";
      rs = stmt.executeQuery(p);
              while (rs.next()) {
-              id_of_user = rs.getInt("id");
-                    name = rs.getString("firstname");
+              id_of_user=rs.getInt("id");
+              name = rs.getString("firstname");
              }
-%>
+ stmt.close();
+            con.close();
+              } 
+        catch (Exception e) {
+            out.println("Unable to retrieve!!");
+        } 
+     %>
+<%
+ Statement stmt_fetch_topic;
+ Connection con_fetch_topic;
+ ResultSet rs_fetch_topic;
+ String topic_name;
+  try {
+         
+     Class.forName("com.mysql.jdbc.Driver");
+     con_fetch_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
+            
+     stmt_fetch_topic = con_fetch_topic.createStatement();
+         
+     String p_fetch_topic =  "select topic_name from topic t right join topic_followers_detail de on t.unique_id = de.topic_id where user_or_followers_id= '"+id_of_user+"'";
+     rs_fetch_topic = stmt_fetch_topic.executeQuery(p_fetch_topic);
+             while (rs_fetch_topic.next()) {
+              topic_name=rs_fetch_topic.getString("topic_name");
+              out.println("<a href=><li>"+topic_name+"</li></a>");
+                           }
+ stmt_fetch_topic.close();
+            con_fetch_topic.close();
+              } 
+        catch (Exception e) {
+            out.println("Unable to retrieve!!");
+        } 
+     %>
+          <a href=""><li>This is for Example</li></a>
+        </ul>
+  </div>
+  <div class="column middle">
+
           
 <h2>Welcome <%=name%></h2>
-
-<%
-   stmt.close();
-   con.close();
- }catch (Exception e) {
-            out.println("Unable to retrieve!!"+e);
-                    } 
-  %>
-     
-<%
-   
- Statement stmt_topic;
- Connection con_topic;
- ResultSet rs_topic;
- String name_topic;   
-
- try {    
-     Class.forName("com.mysql.jdbc.Driver");
-     con_topic      = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-     stmt_topic     = con_topic.createStatement();
-     String p_topic =  "SELECT * FROM topic";
-     rs_topic       = stmt_topic.executeQuery(p_topic); 
- %>
-
-     
-<% 
-    int i = 1;
-    String Status=null;
-    while (rs_topic.next()) {
-              int topic_id = rs_topic.getInt("unique_id");
-              name_topic   = rs_topic.getString("topic_name");
-              
-              out.println("<br>"+topic_id);
-%>   
-             <a href=topic_detail.jsp?<%=name_topic%>><%=name_topic%></a>
-              <%
-                  Statement stmt_topic_followers;
-                  Connection con_topic_followers;
-                  ResultSet rs_topic_followers;
-                  stmt_topic_followers   = con_topic.createStatement();
-                  String topic_followers = "SELECT * FROM topic_followers_detail";
-                  rs_topic_followers = stmt_topic_followers.executeQuery(topic_followers);
-     
-                  while (rs_topic_followers.next()){
-                         int f_topic_id     = rs_topic_followers.getInt("topic_id");
-                         int f_followers_id = rs_topic_followers.getInt("user_or_followers_id");
-                  
-                          if((f_topic_id == topic_id) && (f_followers_id == id_of_user )){
-                          Status = "present";
-                         }
-                 }
-              %>
-              <%
-              if(Status == "present")
-                        out.println("<td><button>Followed</button></td><br>");
-              else{ %>
-                         <td><button onclick="take_value('<%=topic_id%>','<%=id_of_user%>')">Follow</button><p id="demo"></p></td>
-              <% }
-                 Status=null;
-     }
-             
-  stmt_topic.close();
-  //stmt_topic_followers.close();
-  con_topic.close();
-  }catch (Exception e) {
-            out.println("Unable to retrieve!!="+e);
-            } 
- %>
-
+          
+<b>This is the place where we will write</b>
     
      <br>
   </div>
   <div class="column side">
-    <h2>Set up account</h2>
+    <h2>Related Topic</h2>
     <ul class="a">
           <a href=""><li>Visit your feed</li></a>
                   <a href=""><li>Find Your friend on bharat.com</li></a>

@@ -253,23 +253,21 @@ window.onclick = function(event) {
     </ul>
   </div>
   <div class="column middle">
-      <%@page language="java" %>
+
+<%@page language="java" %>
 <%@page import="java.sql.*" %> 
 <%
-    String email=(String)session.getAttribute("email");
+ String email=(String)session.getAttribute("email");
  Statement stmt;
  Connection con;
  ResultSet rs=null;
  String name=null;
  int id_of_user=0;       
 
- try {
-         
+ try {       
      Class.forName("com.mysql.jdbc.Driver");
-     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
+     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);      
      stmt = con.createStatement();
-         
      String p =  "SELECT * FROM newuser WHERE email = '"+email+"'";
      rs = stmt.executeQuery(p);
              while (rs.next()) {
@@ -278,22 +276,20 @@ window.onclick = function(event) {
              }
              
     session.setAttribute("id_of_user", id_of_user);
- stmt.close();
-            con.close();
-              } 
-        catch (Exception e) {
-            System.out.println("Unable to retrieve!!");
-        } 
- 
+    stmt.close();
+    con.close();
+     }catch (Exception e) {
+            out.println("Unable to retrieve!!"+e);
+                          } 
 %>
           
 <h2>Welcome <%=name%></h2>
     <br>
     <h1>
-    <%
-
-String Question=request.getParameter("Id");
- out.print("<b>Q.</b>"+Question+"");
+    
+<%
+   String Question=request.getParameter("Id");
+   out.print("<b>Q.</b>"+Question+"");
 %>
 </h1>
 <%
@@ -302,31 +298,23 @@ String Question=request.getParameter("Id");
  ResultSet rs1;
  int q_id=0;       
 
- try {
-               
+ try {            
      Class.forName("com.mysql.jdbc.Driver");
-     con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
+     con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);      
      stmt1 = con1.createStatement();
-              
      String p =  "SELECT * FROM question WHERE question = '"+Question+"'";
-     
      rs1 = stmt1.executeQuery(p);
              while (rs1.next()) {
               q_id=rs1.getInt("q_id");
               //name = rs.getString("firstname");
-             // out.print("What the hell is printing"+q_id);
-              
-             }
-             
-       session.setAttribute("q_id", q_id);
- stmt1.close();
-            con1.close();
-              } 
-        catch (Exception e) {
-            System.out.println("Unable to retrieve!!");
-        } 
- 
+              // out.print("What the hell is printing"+q_id);
+                                }
+     session.setAttribute("q_id", q_id);
+     stmt1.close();
+     con1.close();
+      }catch (Exception e) {
+            out.println("Unable to retrieve!!"+e);
+                           } 
 %>
 <form name="submitquestion" method="post" action="SubmitAnswer.jsp">
  <textarea rows="4" cols="80" placeholder="Write your answer here..." name="answer"></textarea> 
@@ -341,7 +329,6 @@ String Question=request.getParameter("Id");
  int who_gave_answer=0;      
 
  try {
-               
      Class.forName("com.mysql.jdbc.Driver");
      con2 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);     
      stmt2 = con2.createStatement(); 
@@ -358,18 +345,16 @@ String Question=request.getParameter("Id");
                               while (rs4.next()) { 
                                    String firstname = rs4.getString("firstname");
                                    //out.print(firstname);%>
-  <h4><textarea rows="1" cols="60" name="answer"><%=answer%>&nbsp;&nbsp;-- <%=firstname%></textarea> </h4>
+                                   <h4><textarea rows="1" cols="60" name="answer"><%=answer%>&nbsp;&nbsp;-- <%=firstname%></textarea> </h4>
                                       <%
                                                   }
                                 }
- stmt2.close();
-stmt4.close();
+    stmt2.close();
+    stmt4.close();
     con2.close();
-              } 
-        catch (Exception e) {
+     }catch (Exception e) {
             out.println("Unable to retrieve!!"+e);
-        } 
- 
+                          } 
 %>
  
   </div>

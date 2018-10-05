@@ -1,5 +1,5 @@
 <%@page language="java"%>
-    <%@page import="java.sql.*"%>
+<%@page import="java.sql.*"%>
 <%
  String email,password;
 email = request.getParameter("email");

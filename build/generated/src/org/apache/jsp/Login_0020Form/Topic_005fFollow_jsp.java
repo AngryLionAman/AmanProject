@@ -5,7 +5,7 @@ import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import java.sql.*;
 
-public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
+public final class Topic_005fFollow_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
 
   private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
@@ -212,18 +212,28 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("        width: 100%;\n");
       out.write("    }\n");
       out.write("}\n");
+      out.write("\n");
+      out.write("table, th, td {\n");
+      out.write("    border: 1px solid black;\n");
+      out.write("    border-collapse: collapse;\n");
+      out.write("}\n");
+      out.write("th, td {\n");
+      out.write("    padding: 5px;\n");
+      out.write("    text-align: left;    \n");
+      out.write("}\n");
       out.write("</style>\n");
       out.write("<script type=\"text/javascript\">\n");
       out.write("    \n");
-      out.write("    function take_value(question_id,id_of_user){\n");
-      out.write("        //document.getElementById(\"demo\").innerHTML = \"Welcome\" + firstname+lastname;\n");
-      out.write("               \n");
-      out.write("      var http = new XMLHttpRequest();\n");
-      out.write("      http.open(\"POST\", \"http://localhost:8081/Bharat.com/Login%20Form/like_count.jsp?val=\"+question_id+\"&val2=\"+id_of_user, true);\n");
+      out.write("    function take_value(topic_id,id_of_user){\n");
+      out.write("        //document.getElementById(\"demo\").innerHTML = \"Welcome\" + topic_id+id_of_user;\n");
+      out.write("        \n");
+      out.write("         var http = new XMLHttpRequest();\n");
+      out.write("      http.open(\"POST\", \"http://localhost:8081/Bharat.com/Login%20Form/submit_follow_topic.jsp?val_topic=\"+topic_id+\"&val2_topic=\"+id_of_user, true);\n");
       out.write("      http.setRequestHeader(\"Content-type\",\"application/x-www-form-urlencoded\");\n");
       out.write("      http.send();\n");
       out.write("        \n");
       out.write("    http.onload = function() {\n");
+      out.write("        http.responseText;\n");
       out.write("        http.responseText;\n");
       out.write("        //alert(http.responseText);\n");
       out.write("    }\n");
@@ -232,6 +242,7 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    \n");
       out.write("    \n");
       out.write("</script>\n");
+      out.write("\n");
       out.write("<script>\n");
       out.write("document.getElementsByClassName(\"tablink\")[0].click();\n");
       out.write("\n");
@@ -307,6 +318,15 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("    <h2>Feeds</h2>\n");
       out.write("    \n");
       out.write("\t<ul class=\"a\">\n");
+      out.write("          <a href=\"\"><li>Top Stories</li></a>\n");
+      out.write("           <a href=\"\"><li>Bookmarked Answered</li></a>\n");
+      out.write("           <a href=\"\"><li>Links</li></a>\n");
+      out.write("\t\t    <a href=\"\"><li>Topic You Choosen</li></a>\n");
+      out.write("\t\t\t <a href=\"\"><li>Education</li></a>\n");
+      out.write("\t\t\t  <a href=\"\"><li>Health</li></a>\n");
+      out.write("    </ul>\n");
+      out.write("  </div>\n");
+      out.write("  <div class=\"column middle\">\n");
       out.write("\n");
       out.write(" \n");
 
@@ -330,216 +350,124 @@ public final class Main_jsp extends org.apache.jasper.runtime.HttpJspBase
               id_of_user=rs.getInt("id");
               name = rs.getString("firstname");
              }
- stmt.close();
-            con.close();
-              } 
-        catch (Exception e) {
-            out.println("Unable to retrieve!!");
-        } 
-     
-      out.write('\n');
+ 
 
- Statement stmt_fetch_topic;
- Connection con_fetch_topic;
- ResultSet rs_fetch_topic;
- String topic_name;
-  try {
-         
-     Class.forName("com.mysql.jdbc.Driver");
-     con_fetch_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
-     stmt_fetch_topic = con_fetch_topic.createStatement();
-         
-     String p_fetch_topic =  "select topic_name from topic t right join topic_followers_detail de on t.unique_id = de.topic_id where user_or_followers_id= '"+id_of_user+"'";
-     rs_fetch_topic = stmt_fetch_topic.executeQuery(p_fetch_topic);
-             while (rs_fetch_topic.next()) {
-              topic_name=rs_fetch_topic.getString("topic_name");
-              out.println("<a href=><li>"+topic_name+"</li></a>");
-                           }
- stmt_fetch_topic.close();
-            con_fetch_topic.close();
-              } 
-        catch (Exception e) {
-            out.println("Unable to retrieve!!");
-        } 
-     
-      out.write("\n");
-      out.write("          <a href=\"\"><li>This is for Example</li></a>\n");
-      out.write("        </ul>\n");
-      out.write("  </div>\n");
-      out.write("  <div class=\"column middle\">\n");
       out.write("\n");
       out.write("          \n");
       out.write("<h2>Welcome ");
       out.print(name);
       out.write("</h2>\n");
       out.write("\n");
+
+        //session.setAttribute("name", name);
+ stmt.close();
+            con.close();
+              } 
+        catch (Exception e) {
+            out.println("Unable to retrieve!!"+e);
+        } 
+     
       out.write("\n");
       out.write("     \n");
       out.write("\n");
-      out.write("      \n");
-      out.write("\t<div class=\"w3-container\">\n");
-      out.write("<div class=\"div2\">\n");
-      out.write("<button onclick=\"document.getElementById('id01').style.display='block'\" class=\"w3-button w3-black\">What is your question or link?</button>\n");
-      out.write("\n");
-      out.write("<div id=\"id01\" class=\"w3-modal\">\n");
-      out.write(" <div class=\"w3-modal-content w3-card-4 w3-animate-zoom\">\n");
-      out.write("  <header class=\"w3-container w3-blue\"> \n");
-      out.write("   <span onclick=\"document.getElementById('id01').style.display='none'\" \n");
-      out.write("   class=\"w3-button w3-blue w3-xlarge w3-display-topright\">&times;</span>\n");
-      out.write("   <h2>Ask a Question</h2>\n");
-      out.write("  </header>\n");
-      out.write("\n");
-      out.write("  <div class=\"w3-bar w3-border-bottom\">\n");
-      out.write("   <button class=\"tablink w3-bar-item w3-button\" onclick=\"openCity(event, 'London')\">Add Question</button>\n");
-      out.write("   <button class=\"tablink w3-bar-item w3-button\" onclick=\"openCity(event, 'Paris')\">Share Link</button>\n");
-      out.write("   <button class=\"tablink w3-bar-item w3-button\" onclick=\"openCity(event, 'Tokyo')\"></button>\n");
-      out.write("  </div>\n");
-      out.write("\n");
-      out.write("  <div id=\"London\" class=\"w3-container city\">\n");
-      out.write("   <h1>Question</h1>\n");
-      out.write("   <p>\n");
-      out.write("   \n");
-      out.write("   <form name=\"submitquestion\" method=\"post\" action=\"SubmitQuestion.jsp\">\n");
-      out.write("  <textarea name=\"question\" rows=\"4\" cols=\"50\" required></textarea>\n");
-      out.write("  <input type=\"submit\" name=\"Post\" value=\"Submit\"> \n");
-      out.write("</form>  \n");
-      out.write("     </div>\n");
-      out.write("\n");
-      out.write("  <div id=\"Paris\" class=\"w3-container city\">\n");
-      out.write("   <h1>Paris</h1>\n");
-      out.write("   <p>Paris is the capital of France.</p>\n");
-      out.write("  </div>\n");
-      out.write("\n");
-      out.write("  <div id=\"Tokyo\" class=\"w3-container city\">\n");
-      out.write("   <h1>Tokyo</h1>\n");
-      out.write("   <p>Tokyo is the capital of Japan.</p><br>\n");
-      out.write("  </div>\n");
-      out.write("\n");
-      out.write("  <div class=\"w3-container w3-light-grey w3-padding\">\n");
-      out.write("   <button class=\"w3-button w3-right w3-white w3-border\" \n");
-      out.write("   onclick=\"document.getElementById('id01').style.display='none'\">Close</button>\n");
-      out.write("  </div>\n");
-      out.write(" </div>\n");
-      out.write("</div>\n");
-      out.write("\n");
-      out.write("</div>\n");
-      out.write("</div><br>\n");
-      out.write("        ");
+      out.write("      ");
 
-  Statement stmt1,stmt2=null;
- Connection con1;
- ResultSet rs1,rs2;
- String name1=null;
- String question,fname=null; 
- int ide=0; 
+   
+ Statement stmt_topic;
+ Connection con_topic;
+ ResultSet rs_topic;
+ String name_topic;   
 
  try {
          
      Class.forName("com.mysql.jdbc.Driver");
-     con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);         
-     stmt1 = con1.createStatement();     
-     String q =  "SELECT * FROM question ";
-     rs1 = stmt1.executeQuery(q);
-             while (rs1.next()) {
-              question = rs1.getString("question");
-              ide = rs1.getInt("id");
-              int question_id = rs1.getInt("q_id");
-                            stmt2 = con1.createStatement();
-                            String T =  "SELECT firstname FROM newuser WHERE id='"+ide+"' ";
-                             rs2 = stmt2.executeQuery(T);
-                              while (rs2.next()) {
-                                       fname = rs2.getString("firstname");
-                                       out.println("<div class=div1>");
-                                       out.println(question);
-                                       out.println("&nbsp;");
-                                       out.println("BY");
-                                       out.println("&nbsp;");
-                                       out.println(fname);
-                                       out.println("<br>");
-                                       out.println("<br>");
-                                       out.println("<br>");
-                                       out.println("&nbsp;");
-                                  
+     con_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
+     
+     stmt_topic = con_topic.createStatement();
+     String p_topic =  "SELECT * FROM topic";
+     rs_topic = stmt_topic.executeQuery(p_topic);
+     
+      
+      
+     
       out.write("\n");
-      out.write("                                     <b><a href=\"Answer.jsp?Id=");
-      out.print(rs1.getString("question"));
-      out.write("\" >Answer</a></b>\n");
-      out.write("                                  ");
-
-                                       out.println("&nbsp;&nbsp;");
       out.write("\n");
-      out.write("                                       \n");
-      out.write("                                       ");
+      out.write("     \n");
+ int i = 1;
+String Status=null;
+             while (rs_topic.next()) {
+              int topic_id = rs_topic.getInt("unique_id");
+              name_topic=rs_topic.getString("topic_name");
+              
+              out.println("<br>"+topic_id);
+               
+      out.write("   \n");
+      out.write("             <a href=topic_detail.jsp?");
+      out.print(name_topic);
+      out.write('>');
+      out.print(name_topic);
+      out.write("</a>\n");
+      out.write("              ");
 
-                                       
-                                       
-Statement stmt_count;
-Connection con_count;
-ResultSet rs_count;
-int count_var=0;
-
-try{
-Class.forName("com.mysql.jdbc.Driver");
-con_count=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
-stmt_count=con_count.createStatement();
-String v_count="select count(*) from like_count where Ans_id='"+question_id+"'";
-rs_count=stmt_count.executeQuery(v_count);
-
-
-while(rs_count.next())
-{
-    count_var =rs_count.getInt("count(*)");
-    //out.println(rs_count.getInt("count(*)"));
-    
-}
-
-stmt_count.close();
-con_count.close();
-}
-catch(Exception e)
-{
-out.println(e.getMessage());
-}
-                                       
-                                       
-                                       
+                  Statement stmt_topic_followers;
+                  Connection con_topic_followers;
+                  ResultSet rs_topic_followers;
+                  stmt_topic_followers = con_topic.createStatement();
+                  String topic_followers = "SELECT * FROM topic_followers_detail";
+                  rs_topic_followers = stmt_topic_followers.executeQuery(topic_followers);
+     
+              while (rs_topic_followers.next()){
+                  int f_topic_id = rs_topic_followers.getInt("topic_id");
+                  int f_followers_id = rs_topic_followers.getInt("user_or_followers_id");
+                  
+                  if((f_topic_id == topic_id) && (f_followers_id == id_of_user )){
+                      Status = "present";
+                  }
+              }
+              
       out.write("\n");
-      out.write("                                       \n");
-      out.write("                                       \n");
-      out.write("                                       <button onclick=\"take_value('");
-      out.print(question_id);
+      out.write("              ");
+
+              if(Status == "present")
+                        out.println("<td><button>Followed</button></td><br>");
+            else{ 
+      out.write("\n");
+      out.write("                         <td><button onclick=\"take_value('");
+      out.print(topic_id);
       out.write("','");
       out.print(id_of_user);
-      out.write("')\">UpVote[");
-      out.print(count_var);
-      out.write("]</button><p id=\"demo\"></p>\n");
-      out.write("                                       ");
- out.println("&nbsp;&nbsp;");
-                                       //out.println("<b><a href= >Share</a></b>");
-                                       out.println("</div>");
-                                       
-                                                  }
-                                }
-
-stmt1.close();
-stmt2.close();
-con1.close();
+      out.write("')\">Follow</button><p id=\"demo\"></p></td>\n");
+      out.write("              ");
+ }
+            Status=null;
+              
+      out.write("\n");
+      out.write("              \n");
+      out.write("              \n");
+      out.write("              \n");
+      out.write("             \n");
+      out.write("             ");
+ 
+             }
+             
+ stmt_topic.close();
+ //stmt_topic_followers.close();
+            con_topic.close();
               } 
         catch (Exception e) {
-            System.out.println("Unable to retrieve!!");
+            out.println("Unable to retrieve!!="+e);
         } 
      
       out.write("\n");
-      out.write("\t\n");
+      out.write("\n");
       out.write("    \n");
+      out.write("     <br>\n");
       out.write("  </div>\n");
       out.write("  <div class=\"column side\">\n");
       out.write("    <h2>Set up account</h2>\n");
       out.write("    <ul class=\"a\">\n");
       out.write("          <a href=\"\"><li>Visit your feed</li></a>\n");
-      out.write("           <a href=\"Topic_Follow.jsp\"><li>Follow more Topic</li></a>\n");
-      out.write("           <a href=\"\"><li>Find Your friend on bharat.com</li></a>\n");
+      out.write("                  <a href=\"\"><li>Find Your friend on bharat.com</li></a>\n");
       out.write("\t\t    <a href=\"\"><li>Ask your first question</li></a>\n");
       out.write("\t\t\t <a href=\"\"><li>Answer a Question</li></a>\n");
       out.write("\t\t\t  <a href=\"\"><li>Update your profile</li></a>\n");

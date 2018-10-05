@@ -259,7 +259,7 @@ window.onclick = function(event) {
     </ul>
   </div>
   <div class="column middle">
-      <%@page language="java" %>
+<%@page language="java" %>
 <%@page import="java.sql.*" %> 
 <% //Printing User name
  String email=(String)session.getAttribute("email");
@@ -269,18 +269,15 @@ window.onclick = function(event) {
  String name=null;
  int id=0;       
 
- try {
-         
+ try {  
      Class.forName("com.mysql.jdbc.Driver");
-     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
+     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);      
      stmt = con.createStatement();
-         
      String p =  "SELECT * FROM newuser WHERE email = '"+email+"'";
      rs = stmt.executeQuery(p);
              while (rs.next()) {
-              id=rs.getInt("id");
-              name = rs.getString("firstname");
+                    id   = rs.getInt("id");
+                    name = rs.getString("firstname");
              }
  
 %>
@@ -288,44 +285,40 @@ window.onclick = function(event) {
 <h2>Welcome <%=name%></h2>
 
 <%
-        //session.setAttribute("name", name);
  stmt.close();
-            con.close();
-              } 
-        catch (Exception e) {
-            System.out.println("Unable to retrieve!!");
-        } 
+ con.close();
+     }catch (Exception e) {
+            out.println("Unable to retrieve!!"+e);
+                          } 
   //End printing user name  
 %>
   
+<% 
+    if(request.getParameter("Q_value")==null){
+       out.print("<h3>User account List, You might like to follow other... </h3>");
   
+        Statement stmt_un;
+        Connection con_un;
+        ResultSet rs_un;
+        String firstname,lastname,interest;
+        int Id_of_user;       
 
-  <% if(request.getParameter("Q_value")==null){
-      out.print("<h3>User account List, You might like to follow other... </h3>");
-  
- Statement stmt_un;
- Connection con_un;
- ResultSet rs_un;
- String firstname,lastname,interest;
- int Id_of_user;       
-
- try {
-         
-     Class.forName("com.mysql.jdbc.Driver");
-     con_un = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);     
-     stmt_un = con_un.createStatement();
-     String p_un =  "SELECT * FROM newuser";
-     rs_un = stmt_un.executeQuery(p_un);
-     out.print("<table>");
-     out.print("<tr>");
-     out.print("<th>Name</th>");
-     out.print("<th>Interent</th>");
-     out.print("<tr>");
+         try {
+                Class.forName("com.mysql.jdbc.Driver");
+                con_un      = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);     
+                stmt_un     = con_un.createStatement();
+                String p_un =  "SELECT * FROM newuser";
+                rs_un       = stmt_un.executeQuery(p_un);
+                out.print("<table>");
+                out.print("<tr>");
+                out.print("<th>Name</th>");
+                out.print("<th>Interent</th>");
+                out.print("<tr>");
              while (rs_un.next()) {
                           Id_of_user = rs_un.getInt("ID");
-                          firstname = rs_un.getString("firstname");
-                          lastname = rs_un.getString("lastname");
-                          interest = rs_un.getString("interests");
+                          firstname  = rs_un.getString("firstname");
+                          lastname   = rs_un.getString("lastname");
+                          interest   = rs_un.getString("interests");
                           out.print("<tr>");
                           %>
                           <td><a href=CreateSessionOtherUserProfile.jsp?Id_of_user=<%=Id_of_user%>><%=firstname%><%=lastname%></a></td>
@@ -334,14 +327,13 @@ window.onclick = function(event) {
                           out.print("<tr>");
                           
              }
-     out.print("</table>");
+               out.print("</table>");
 
- stmt_un.close();
- con_un.close();
-              } 
-        catch (Exception e) {
-            out.print(e);
-        } 
+                stmt_un.close();
+                con_un.close();
+              }catch (Exception e) {
+                        out.println("Error:"+e);
+                                   } 
   }
   //End printing All user name   
   %>
@@ -349,35 +341,30 @@ window.onclick = function(event) {
 
 <%
  if(request.getParameter("Q_value")!=null){
- try
-       {
-    //String parameter_value = request.getParameter("Q_value");
-    //out.print(parameter_value);
-if(request.getParameter("Q_value").equals("Question"))
+ try{
+    if(request.getParameter("Q_value").equals("Question"))
             {
-        out.print("<b>--------------------Question----------------------------</b>");
+                out.print("<b>--------------------Question----------------------------</b>");
     
-        Statement stmt_q=null;
-        Connection con_q;
-        ResultSet rs_q;
-        String Question_asked_by_user;
+                 Statement stmt_q=null;
+                 Connection con_q;
+                 ResultSet rs_q;
+                 String Question_asked_by_user;
 
-Class.forName("com.mysql.jdbc.Driver");
-con_q=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
-stmt_q=con_q.createStatement();
-String Q="SELECT * FROM question WHERE id = '"+id+"'";
-rs_q=stmt_q.executeQuery(Q);
-int count=1;
-while(rs_q.next())
-{
-    Question_asked_by_user=rs_q.getString("question");
-    out.print("<br><br>"+ count++ +"<b>&nbsp;&nbsp;"+Question_asked_by_user+"</b>");
-    
-}
+                 Class.forName("com.mysql.jdbc.Driver");
+                 con_q    = DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
+                 stmt_q   = con_q.createStatement();
+                 String Q = "SELECT * FROM question WHERE id = '"+id+"'";
+                 rs_q     = stmt_q.executeQuery(Q);
+                 int count=1;
+                 while(rs_q.next()){
+                            Question_asked_by_user = rs_q.getString("question");
+                            out.print("<br><br>"+ count++ +"<b>&nbsp;&nbsp;"+Question_asked_by_user+"</b>");
+                                    }
 
-stmt_q.close();
-con_q.close();
-}
+                 stmt_q.close();
+                 con_q.close();
+            }
 
 //Staring answer programming....................................................
 
@@ -391,38 +378,33 @@ if(request.getParameter("Q_value").equals("Answer"))
         String Answer_given_by_user;
         int Question_id =0;
 
-Class.forName("com.mysql.jdbc.Driver");
-con_a=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
-stmt_a=con_a.createStatement();
-stmt_a2=con_a.createStatement();
-String Q_a="SELECT * FROM answer WHERE Answer_by_id = '"+id+"'";
-rs_a=stmt_a.executeQuery(Q_a);
-int count=1;
-while(rs_a.next())
-{
-    Answer_given_by_user=rs_a.getString("answer");
-    Question_id = rs_a.getInt("q_id");
-    //out.print(Question_id);
-    //out.print("<br><br>"+ count++ +"Q_id="+Question_id+"<b>&nbsp;&nbsp;"+Answer_given_by_user+"</b>");
+        Class.forName("com.mysql.jdbc.Driver");
+        con_a      = DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
+        stmt_a     = con_a.createStatement();
+        stmt_a2    = con_a.createStatement();
+        String Q_a = "SELECT * FROM answer WHERE Answer_by_id = '"+id+"'";
+        rs_a       = stmt_a.executeQuery(Q_a);
+        int count  = 1;
+        while(rs_a.next()){
+                Answer_given_by_user=rs_a.getString("answer");
+                Question_id = rs_a.getInt("q_id");
+   
                         String T_a =  "SELECT * FROM question WHERE q_id = '"+Question_id+"'";
-                             rs_a2 = stmt_a2.executeQuery(T_a);
-                              while (rs_a2.next()) { 
+                        rs_a2      = stmt_a2.executeQuery(T_a);
+                        while (rs_a2.next()) { 
                                    String Question_by_user = rs_a2.getString("question");
-                                   //out.print(Question_by_user);
                                    out.print("<br><br>"+"<b>Q"+ count++ +"-->"+Question_by_user+"<br>Ans.</b>&nbsp;&nbsp;&nbsp;&nbsp;"+Answer_given_by_user);
-                              }
+                                              }
     
 }
 
-stmt_a2.close();
-stmt_a.close();
-con_a.close();
-}
-}
-catch(Exception e)
-{
-out.print(e);
-}
+        stmt_a2.close();
+        stmt_a.close();
+        con_a.close();
+       }
+}catch(Exception e){
+            out.println("Error:"+e);
+                }
  }//IF statement closed here
 %>
       

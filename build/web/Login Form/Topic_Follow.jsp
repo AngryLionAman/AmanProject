@@ -188,15 +188,11 @@ th, td {
       http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
       http.send();
         
-    http.onload = function() {
-        http.responseText;
+      http.onload = function() {
         http.responseText;
         //alert(http.responseText);
     }
-      
-    }
-    
-    
+  }  
 </script>
 
 <script>
@@ -286,114 +282,95 @@ window.onclick = function(event) {
 <%@page language="java" %>
 <%@page import="java.sql.*" %> 
 <%
-    String email=(String)session.getAttribute("email");
+ String email=(String)session.getAttribute("email");
  Statement stmt;
  Connection con;
  ResultSet rs;
- String name=null;
- int id_of_user=0;       
+ String name    = null;
+ int id_of_user = 0;       
 
  try {
          
      Class.forName("com.mysql.jdbc.Driver");
-     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
+     con  = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);     
      stmt = con.createStatement();
-         
      String p =  "SELECT * FROM newuser WHERE email = '"+email+"'";
      rs = stmt.executeQuery(p);
              while (rs.next()) {
-              id_of_user=rs.getInt("id");
-              name = rs.getString("firstname");
+              id_of_user = rs.getInt("id");
+                    name = rs.getString("firstname");
              }
- 
 %>
           
 <h2>Welcome <%=name%></h2>
 
 <%
-        //session.setAttribute("name", name);
- stmt.close();
-            con.close();
-              } 
-        catch (Exception e) {
+   stmt.close();
+   con.close();
+ }catch (Exception e) {
             out.println("Unable to retrieve!!"+e);
-        } 
-     %>
+                    } 
+  %>
      
-
-      <%
+<%
    
  Statement stmt_topic;
  Connection con_topic;
  ResultSet rs_topic;
  String name_topic;   
 
- try {
-         
+ try {    
      Class.forName("com.mysql.jdbc.Driver");
-     con_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-     
-     stmt_topic = con_topic.createStatement();
+     con_topic      = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
+     stmt_topic     = con_topic.createStatement();
      String p_topic =  "SELECT * FROM topic";
-     rs_topic = stmt_topic.executeQuery(p_topic);
-     
-      
-      
-     %>
+     rs_topic       = stmt_topic.executeQuery(p_topic); 
+ %>
 
      
-<% int i = 1;
-String Status=null;
-             while (rs_topic.next()) {
+<% 
+    int i = 1;
+    String Status=null;
+    while (rs_topic.next()) {
               int topic_id = rs_topic.getInt("unique_id");
-              name_topic=rs_topic.getString("topic_name");
+              name_topic   = rs_topic.getString("topic_name");
               
               out.println("<br>"+topic_id);
-              out.println(name_topic); %>   
-             
+%>   
+             <a href=topic_detail.jsp?<%=name_topic%>><%=name_topic%></a>
               <%
                   Statement stmt_topic_followers;
                   Connection con_topic_followers;
                   ResultSet rs_topic_followers;
-                  stmt_topic_followers = con_topic.createStatement();
+                  stmt_topic_followers   = con_topic.createStatement();
                   String topic_followers = "SELECT * FROM topic_followers_detail";
                   rs_topic_followers = stmt_topic_followers.executeQuery(topic_followers);
      
-              while (rs_topic_followers.next()){
-                  int f_topic_id = rs_topic_followers.getInt("topic_id");
-                  int f_followers_id = rs_topic_followers.getInt("user_or_followers_id");
+                  while (rs_topic_followers.next()){
+                         int f_topic_id     = rs_topic_followers.getInt("topic_id");
+                         int f_followers_id = rs_topic_followers.getInt("user_or_followers_id");
                   
-                  if((f_topic_id == topic_id) && (f_followers_id == id_of_user )){
-                      Status = "present";
-                  }
-                  
-                  //out.println("["+ i++ +"]"+"("+f_topic_id+","+topic_id+")_("+f_followers_id+","+id_of_user+")<br>");
-              }
+                          if((f_topic_id == topic_id) && (f_followers_id == id_of_user )){
+                          Status = "present";
+                         }
+                 }
               %>
               <%
               if(Status == "present")
                         out.println("<td><button>Followed</button></td><br>");
-            else{ %>
+              else{ %>
                          <td><button onclick="take_value('<%=topic_id%>','<%=id_of_user%>')">Follow</button><p id="demo"></p></td>
               <% }
-            Status=null;
-              %>
-              
-              
-              
+                 Status=null;
+     }
              
-             <% 
-             }
-             
- stmt_topic.close();
- //stmt_topic_followers.close();
-            con_topic.close();
-              } 
-        catch (Exception e) {
+  stmt_topic.close();
+  //stmt_topic_followers.close();
+  con_topic.close();
+  }catch (Exception e) {
             out.println("Unable to retrieve!!="+e);
-        } 
-     %>
+            } 
+ %>
 
     
      <br>
