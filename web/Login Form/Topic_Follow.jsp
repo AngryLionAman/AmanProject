@@ -337,7 +337,7 @@ window.onclick = function(event) {
               
               out.println("<br>"+topic_id);
 %>   
-             <a href=topic_detail.jsp?<%=name_topic%>><%=name_topic%></a>
+             <a href=topic_detail.jsp?topic_id=<%=topic_id%>><%=name_topic%></a>
               <%
                   Statement stmt_topic_followers;
                   Connection con_topic_followers;

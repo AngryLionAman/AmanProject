@@ -1,9 +1,4 @@
-<%@page language="java"%>
-<%@page import="java.sql.*"%>
 <%
-  
-    String email=(String)session.getAttribute("Variable_of");
- 
-        out.print(email);
-            
-%>
+ String topic_id_fetch  = request.getParameter("topic_id");
+  out.println(topic_id_fetch);
+  %>

@@ -271,7 +271,8 @@ window.onclick = function(event) {
  Connection con;
  ResultSet rs;
  String name=null;
- int id_of_user=0;       
+ int id_of_user=0;  
+ int topic_id = 0;
 
  try {      
      Class.forName("com.mysql.jdbc.Driver");
@@ -299,16 +300,21 @@ window.onclick = function(event) {
      Class.forName("com.mysql.jdbc.Driver");
      con_fetch_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);          
      stmt_fetch_topic = con_fetch_topic.createStatement();
-     String p_fetch_topic =  "select topic_name from topic t right join topic_followers_detail de on t.unique_id = de.topic_id where user_or_followers_id= '"+id_of_user+"'";
+     String p_fetch_topic =  "select t.unique_id,t.topic_name from topic t "
+             + "right join topic_followers_detail de "
+             + "on t.unique_id = de.topic_id "
+             + "where user_or_followers_id= '"+id_of_user+"'";
      rs_fetch_topic = stmt_fetch_topic.executeQuery(p_fetch_topic);
              while (rs_fetch_topic.next()) {
-              topic_name=rs_fetch_topic.getString("topic_name");
-              out.println("<a href=><li>"+topic_name+"</li></a>");
-                           }
+              topic_name = rs_fetch_topic.getString("topic_name");
+                topic_id = rs_fetch_topic.getInt("unique_id");%>
+              <li>[<%=topic_id%>] <a href="topic_detail.jsp?topic_id=<%=topic_id%>"><%=topic_name%></a></li>
+                          <% }
+     rs_fetch_topic.close();
      stmt_fetch_topic.close();
      con_fetch_topic.close();
       }catch (Exception e) {
-            out.println("Unable to retrieve!!");
+            out.println("Unable to retrieve!!"+e);
         } 
   %>
           <a href=""><li>This is for Example</li></a>
@@ -341,7 +347,8 @@ window.onclick = function(event) {
    <p>
    
    <form name="submitquestion" method="post" action="SubmitQuestion.jsp">
-  <textarea name="question" rows="4" cols="50" required></textarea>
+  <textarea name="question" rows="4" cols="50" placeholder="Ask Your Question Here" required></textarea>
+  <textarea name="tag_of_question" rows="3.5" cols="40" placeholder="Insert The Question Tag" required></textarea>
   <input type="submit" name="Post" value="Submit"> 
    </form>  
      </div>
@@ -366,6 +373,25 @@ window.onclick = function(event) {
 </div>
 </div><br>
 <%
+ try{ 
+ Statement stmt_fetch_topic_again;
+ Connection con_fetch_topic_again;
+ ResultSet rs_fetch_topic_again;
+ String topic_name_again;
+           
+     Class.forName("com.mysql.jdbc.Driver");
+     con_fetch_topic_again = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);          
+     stmt_fetch_topic_again = con_fetch_topic_again.createStatement();
+     String p_fetch_topic_again =  "select t.unique_id,t.topic_name "
+             + "from topic t right join topic_followers_detail de "
+             + "on t.unique_id = de.topic_id "
+             + "where user_or_followers_id= '"+id_of_user+"'";
+     rs_fetch_topic_again = stmt_fetch_topic_again.executeQuery(p_fetch_topic_again);
+             while (rs_fetch_topic_again.next()) {
+              topic_name = rs_fetch_topic_again.getString("topic_name");
+                topic_id = rs_fetch_topic_again.getInt("unique_id");
+             
+    
   Statement stmt1,stmt2=null;
   Connection con1;
   ResultSet rs1,rs2;
@@ -378,9 +404,14 @@ window.onclick = function(event) {
      Class.forName("com.mysql.jdbc.Driver");
      con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);         
      stmt1 = con1.createStatement();     
-     String q =  "SELECT * FROM question ";
+     String q =  "select q.id,q.q_id,q.question "
+             + "from question q "
+             + "right join question_topic_tag qtt "
+             + "on q.q_id = qtt.question_id where tag_id='"+topic_id+"'";
      rs1 = stmt1.executeQuery(q);
-             while (rs1.next()) {
+             if (!rs1.next()) {
+                 out.println("<br>ResultSet is Empty");
+             }else{
               question = rs1.getString("question");
               ide = rs1.getInt("id");
               int question_id = rs1.getInt("q_id");
@@ -423,7 +454,7 @@ window.onclick = function(event) {
    stmt_count.close();
    con_count.close();
      }catch(Exception e){
-            out.println(e.getMessage());
+            out.println("Error One : "+e);
                }
   %>
                                                                   
@@ -432,14 +463,21 @@ window.onclick = function(event) {
               out.println("</div>");
                                        
               }
-           }
+            }
 
   stmt1.close();
   stmt2.close();
   con1.close();
 }catch (Exception e) {
-           out.println("Unable to retrieve!!"+e);
-               } 
+           out.println("<br>Error Two :"+e);
+               }
+}
+     rs_fetch_topic_again.close();
+     stmt_fetch_topic_again.close();
+     con_fetch_topic_again.close();
+ }catch (Exception e) {
+            out.println("Error Three : "+e);
+        } 
  %>
 	
     

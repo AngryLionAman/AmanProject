@@ -42,51 +42,35 @@ public final class try_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write("  \r\n");
       out.write("\r\n");
-      out.write("  \r\n");
-      out.write("  ");
- //Printing All User name
-    //String email=(String)session.getAttribute("email");
- Statement stmt_un;
- Connection con_un;
- ResultSet rs_un;
- String firstname,lastname,interest;
- //int id=0;       
+      out.write("\r\n");
 
- try {
-         
-     Class.forName("com.mysql.jdbc.Driver");
-     con_un = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
-     stmt_un = con_un.createStatement();
-         
-     String p_un =  "SELECT * FROM newuser";
-     rs_un = stmt_un.executeQuery(p_un);
-     out.print("<table>");
-     out.print("<tr>");
-     out.print("<td>Name</td>");
-     out.print("<td>Interent</td>");
-     out.print("<tr>");
-             while (rs_un.next()) {
-                          firstname = rs_un.getString("firstname");
-                          lastname = rs_un.getString("lastname");
-                          interest = rs_un.getString("interest");
-                          out.print("<tr>");
-                          out.print("<td>"+firstname+""+lastname+"</td>");
-                          out.print("<td>"+interest+"</td>");
-                          out.print("<tr>");
-                          
-             }
-     out.print("</table>");
 
- stmt_un.close();
- con_un.close();
-              } 
-        catch (Exception e) {
-            System.out.println("Unable to retrieve!!");
-        } 
-  //End printing All user name   
+try{
+    Statement stmt;
+Connection con;
+ResultSet rs;
+
+    Class.forName("com.mysql.jdbc.Driver");
+    con=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
+    stmt=con.createStatement();
+    String v="select * from newuser where id=102";
+    rs=stmt.executeQuery(v);
+
+    int i=0;
+    while(!rs.next()){
+        out.println("Hello");
+        int id = rs.getInt("ID");
+        String username1=rs.getString("email");
+        String password1 = rs.getString("password");
+        out.println("<br>HI"+id+" "+username1+" "+password1);
+    }
+stmt.close();
+con.close();
+}catch(Exception e){
+    out.println("Error"+e);
+   }
+
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;

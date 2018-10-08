@@ -29,10 +29,6 @@ while(rs1.next())
     //password1 = rs1.getString("password");
     
 }
-
-
-
-     
      
    String[] interests = request.getParameterValues("dropdown_selection");
        String result = new String("");

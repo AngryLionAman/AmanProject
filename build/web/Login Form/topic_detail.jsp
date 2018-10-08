@@ -178,6 +178,25 @@ th, td {
     text-align: left;    
 }
 </style>
+<script type="text/javascript">
+    
+    function take_value(question_id,id_of_user){
+        //document.getElementById("demo").innerHTML = "Welcome" + firstname+lastname;
+               
+      var http = new XMLHttpRequest();
+      http.open("POST", "http://localhost:8081/Bharat.com/Login%20Form/like_count.jsp?val="+question_id+"&val2="+id_of_user, true);
+      http.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+      http.send();
+        
+    http.onload = function() {
+        http.responseText;
+        //alert(http.responseText);
+    }
+      
+    }
+    
+    
+</script>
 <script>
 document.getElementsByClassName("tablink")[0].click();
 
@@ -224,7 +243,7 @@ window.onclick = function(event) {
 </div>
 
 <div class="topnav">
-  <a href="#">Home</a>
+  <a href="Main.jsp">Home</a>
   <a href="#">Ansewer</a>
   <a href="#">Nodification</a>
   
@@ -256,79 +275,181 @@ window.onclick = function(event) {
 <%@page language="java" %>
 <%@page import="java.sql.*" %> 
 <%
- String email=(String)session.getAttribute("email");
+ String email = (String)session.getAttribute("email");
  Statement stmt;
  Connection con;
  ResultSet rs;
- String name=null;
- int id_of_user=0;       
+ String name    = null;
+ int id_of_user = 0;       
 
  try {
-         
      Class.forName("com.mysql.jdbc.Driver");
-     con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
-     stmt = con.createStatement();
-         
+     con      = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);  
+     stmt     = con.createStatement();         
      String p =  "SELECT * FROM newuser WHERE email = '"+email+"'";
      rs = stmt.executeQuery(p);
              while (rs.next()) {
-              id_of_user=rs.getInt("id");
-              name = rs.getString("firstname");
-             }
+                id_of_user = rs.getInt("id");
+                name       = rs.getString("firstname");
+                           }
  stmt.close();
-            con.close();
-              } 
-        catch (Exception e) {
+ con.close();
+        }catch (Exception e) {
             out.println("Unable to retrieve!!");
         } 
-     %>
+%>
 <%
  Statement stmt_fetch_topic;
  Connection con_fetch_topic;
  ResultSet rs_fetch_topic;
  String topic_name;
+ int topic_id = 0;
   try {
-         
-     Class.forName("com.mysql.jdbc.Driver");
-     con_fetch_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-            
-     stmt_fetch_topic = con_fetch_topic.createStatement();
-         
-     String p_fetch_topic =  "select topic_name from topic t right join topic_followers_detail de on t.unique_id = de.topic_id where user_or_followers_id= '"+id_of_user+"'";
-     rs_fetch_topic = stmt_fetch_topic.executeQuery(p_fetch_topic);
+        Class.forName("com.mysql.jdbc.Driver");
+        con_fetch_topic       = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);   
+        stmt_fetch_topic      = con_fetch_topic.createStatement();  
+        String p_fetch_topic  = "select t.unique_id,t.topic_name from "
+                + "topic t right join topic_followers_detail de "
+                + "on t.unique_id = de.topic_id where user_or_followers_id= '"+id_of_user+"'";
+        rs_fetch_topic = stmt_fetch_topic.executeQuery(p_fetch_topic);
              while (rs_fetch_topic.next()) {
-              topic_name=rs_fetch_topic.getString("topic_name");
-              out.println("<a href=><li>"+topic_name+"</li></a>");
+              topic_name = rs_fetch_topic.getString("topic_name");
+              topic_id   = rs_fetch_topic.getInt("unique_id");
+              %>
+               <li><%=topic_id%><a href="topic_detail.jsp?topic_id=<%=topic_id%>"><%=topic_name%></a></li>
+            <%
                            }
  stmt_fetch_topic.close();
-            con_fetch_topic.close();
-              } 
-        catch (Exception e) {
-            out.println("Unable to retrieve!!");
+ con_fetch_topic.close();
+       }catch (Exception e) {
+            out.println("Unable to retrieve!!"+e);
         } 
-     %>
+ %>
           <a href=""><li>This is for Example</li></a>
         </ul>
   </div>
-  <div class="column middle">
-
-          
+  <div class="column middle">        
 <h2>Welcome <%=name%></h2>
           
-<b>This is the place where we will write</b>
+<b>-------------Question----------------</b>
+<%
+  String topic_id_fetch = request.getParameter("topic_id");
+  out.println(topic_id_fetch);
+ Statement stmt1,stmt2=null;
+  Connection con1;
+  ResultSet rs1,rs2;
+  String name1=null;
+  String question,fname=null; 
+  int ide=0; 
+
+  try {
+         
+     Class.forName("com.mysql.jdbc.Driver");
+     con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);         
+     stmt1 = con1.createStatement();     
+     String q =  "select q.id,q.question,q.q_id from question q right join question_topic_tag qtt on qtt.question_id=q.q_id where tag_id='"+topic_id_fetch+"'";
+     rs1 = stmt1.executeQuery(q);
+             while (rs1.next()) {
+              question = rs1.getString("question");
+              ide = rs1.getInt("id");
+              int question_id = rs1.getInt("q_id");
+                            stmt2 = con1.createStatement();
+                            String T =  "SELECT firstname FROM newuser WHERE id='"+ide+"' ";
+                            rs2 = stmt2.executeQuery(T);
+                            while (rs2.next()) {
+                                       fname = rs2.getString("firstname");
+                                       out.println("<div class=div1>");
+                                       out.println(question);
+                                       out.println("&nbsp;");
+                                       out.println("BY");
+                                       out.println("&nbsp;");
+                                       out.println(fname);
+                                       out.println("<br>");
+                                       out.println("<br>");
+                                       out.println("<br>");
+                                       out.println("&nbsp;");
+                                  %>
+                                     <b><a href="Answer.jsp?Id=<%=rs1.getString("question")%>" >Answer</a></b>
+                                  <%
+                                       out.println("&nbsp;&nbsp;");%>
+                                       
+  <%                             
+   Statement stmt_count;
+   Connection con_count;
+   ResultSet rs_count;
+   int count_var=0;
+
+   try{
+      Class.forName("com.mysql.jdbc.Driver");
+      con_count=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
+      stmt_count=con_count.createStatement();
+      String v_count="select count(*) from like_count where Ans_id='"+question_id+"'";
+      rs_count=stmt_count.executeQuery(v_count);
+      while(rs_count.next()){
+                 count_var =rs_count.getInt("count(*)");    
+                            }
+
+   stmt_count.close();
+   con_count.close();
+     }catch(Exception e){
+            out.println("Error One : "+e);
+               }
+  %>
+                                                                  
+           <button onclick="take_value('<%=question_id%>','<%=id_of_user%>')">UpVote[<%=count_var%>]</button><p id="demo"></p>
+           <% out.println("&nbsp;&nbsp;");
+              out.println("</div>");
+                                       
+              }
+            }
+
+  stmt1.close();
+  stmt2.close();
+  con1.close();
+}catch (Exception e) {
+           out.println("<br><b>Question Not Found...</b>"+e);
+               }
+ %>
+
     
      <br>
   </div>
   <div class="column side">
     <h2>Related Topic</h2>
-    <ul class="a">
-          <a href=""><li>Visit your feed</li></a>
-                  <a href=""><li>Find Your friend on bharat.com</li></a>
-		    <a href=""><li>Ask your first question</li></a>
-			 <a href=""><li>Answer a Question</li></a>
-			  <a href=""><li>Update your profile</li></a>
-    </ul>
+    <%
+ 
+ Statement stmt_related_topic;
+ Connection con_related_topic;
+ ResultSet rs_related_topic;
+ try {
+     Class.forName("com.mysql.jdbc.Driver");
+     con_related_topic      = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);  
+     stmt_related_topic     = con_related_topic.createStatement();         
+     String p_related_topic =  "select question_id from question_topic_tag where tag_id='"+topic_id_fetch+"'";
+     rs_related_topic = stmt_related_topic.executeQuery(p_related_topic);
+     %><ul class="a"><%
+             while (rs_related_topic.next()) {
+                int QuestionId = rs_related_topic.getInt("question_id");
+                            Statement stmt_related_;
+                            ResultSet rs_related_;
+                            stmt_related_     = con_related_topic.createStatement();         
+                            String p_related_ =  "select t.unique_id,t.topic_name from topic t right join question_topic_tag qtt on t.unique_id=qtt.tag_id where question_id='"+QuestionId+"'";
+                            rs_related_ = stmt_related_.executeQuery(p_related_);
+                            while (rs_related_.next()) {
+                                int unique_id = rs_related_.getInt("unique_id");
+                                String topic_nameA = rs_related_.getString("topic_name");
+                                %><a href=""><li><%=topic_nameA%></li></a><%
+                            }
+                           stmt_related_.close();
+                           rs_related_.close();
+                           }
+                    out.println("</ul>");
+ stmt_related_topic.close();
+  con_related_topic.close();
+        }catch (Exception e) {
+            out.println("Unable to retrieve!!"+e);
+        } 
+%>    
   </div>
 </div>
   
