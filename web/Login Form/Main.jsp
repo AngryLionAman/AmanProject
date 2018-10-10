@@ -238,8 +238,8 @@ window.onclick = function(event) {
   <a href="#">Ansewer</a>
   <a href="#">Nodification</a>
   
-  <form class="example" action="action_page.jsp" style="margin:auto;max-width:300px">
-  <input type="text" placeholder="Search.." name="search2">
+  <form class="example" action="SearchBar.jsp" style="margin:auto;max-width:300px">
+  <input type="text" placeholder="Search.." name="search">
    <button type="submit"><i class="fa fa-search"></i></button>
 </form>
 </div>
@@ -252,8 +252,8 @@ window.onclick = function(event) {
     <a href="#contact">Message</a>
 	<a href="#contact">your Content</a>
 	<a href="#contact">Stats</a>
-	<a href="#contact">Settings</a>
-	<a href="#contact">Help</a>
+	<a href="settings.jsp">Settings</a>
+	<a href="help.jsp">Help</a>
 	
   </div>
 </div>

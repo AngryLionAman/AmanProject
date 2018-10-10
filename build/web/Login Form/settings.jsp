@@ -1,6 +1,6 @@
 <%-- 
-    Document   : action_page
-    Created on : 2 Sep, 2018, 6:51:06 PM
+    Document   : settings
+    Created on : 9 Oct, 2018, 9:18:42 AM
     Author     : AngryLion
 --%>
 
@@ -9,10 +9,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Searching page</title>
+        <title>Setting</title>
     </head>
     <body>
-        <h1>Hello User!</h1>
-        <h1>Under the construction</h1>
+        <h1>Here user can control there own data as they want.They should have full control<br>Page Under construction..</h1>
     </body>
 </html>

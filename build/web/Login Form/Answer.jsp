@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <title>Bharat.com</title>
+<script src="ckeditor/ckeditor.js"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -317,7 +318,7 @@ window.onclick = function(event) {
                            } 
 %>
 <form name="submitquestion" method="post" action="SubmitAnswer.jsp">
- <textarea rows="4" cols="80" placeholder="Write your answer here..." name="answer"></textarea> 
+ <textarea class="ckeditor" name="answer"></textarea>
  <input type="submit" name="Post" value="Submit"> 
  </form>
  <br>

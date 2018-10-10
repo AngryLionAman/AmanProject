@@ -3,7 +3,6 @@ package org.apache.jsp.Login_0020Form;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
-import java.sql.*;
 
 public final class try_jsp extends org.apache.jasper.runtime.HttpJspBase
     implements org.apache.jasper.runtime.JspSourceDependent {
@@ -42,35 +41,15 @@ public final class try_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write("\r\n");
-      out.write("\r\n");
-
-
-try{
-    Statement stmt;
-Connection con;
-ResultSet rs;
-
-    Class.forName("com.mysql.jdbc.Driver");
-    con=DriverManager.getConnection("jdbc:mysql://localhost/bharat","root",null);
-    stmt=con.createStatement();
-    String v="select * from newuser where id=102";
-    rs=stmt.executeQuery(v);
-
-    int i=0;
-    while(!rs.next()){
-        out.println("Hello");
-        int id = rs.getInt("ID");
-        String username1=rs.getString("email");
-        String password1 = rs.getString("password");
-        out.println("<br>HI"+id+" "+username1+" "+password1);
-    }
-stmt.close();
-con.close();
-}catch(Exception e){
-    out.println("Error"+e);
-   }
-
+      out.write("<html>\r\n");
+      out.write("    \r\n");
+      out.write("    <head>\r\n");
+      out.write("        <script class=\"ckeditor/ckeditor.js\"></script>\r\n");
+      out.write("    </head>\r\n");
+      out.write("    <body>\r\n");
+      out.write("        <textarea class=\"ckeditor\" name=\"editor\"></textarea>\r\n");
+      out.write("    </body>\r\n");
+      out.write("</html>");
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;
