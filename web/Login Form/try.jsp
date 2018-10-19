@@ -1,5 +1,5 @@
 <html>
-    
+
     <head>
         <title>CK Editor Testing</title>
         <script src="ckeditor/ckeditor.js"></script>
@@ -9,6 +9,6 @@
             <textarea class="ckeditor" name="editor"></textarea>
             <input type="submit" name="submit" value="submit">
         </form>
-        
+
     </body>
 </html>

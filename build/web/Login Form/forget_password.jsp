@@ -20,66 +20,65 @@
 
                 <tr><td><b><font color="red">To:
 
-                    </td>
+                            </td>
 
-                    <td><b><b><input type="text" name="mail" value="Enter sender mail-id"/><br/>
+                            <td><b><b><input type="text" name="mail" value="Enter sender mail-id"/><br/>
 
-                    </td>
+                                        </td>
 
-                </tr>
+                                        </tr>
 
-                <tr>
+                                        <tr>
 
-                    <td>
+                                            <td>
 
-                        <b><font color="red">Subject:
+                                                <b><font color="red">Subject:
 
-                    </td>
+                                                    </td>
 
-                    <td>
+                                                    <td>
 
-                        <input type="text" name="sub" value="Enter Subject Line"><br/>
+                                                        <input type="text" name="sub" value="Enter Subject Line"><br/>
 
-                    </td>
+                                                    </td>
 
-                </tr>
+                                        </tr>
 
-                <tr>
+                                        <tr>
 
-                    <td>
+                                            <td>
 
-                        <b><font color="red">Message Text:
+                                                <b><font color="red">Message Text:
 
-                    </td>
+                                                    </td>
 
-                    <td>
+                                                    <td>
 
-                        <textarea rows="12" cols="80" name="mess"></textarea><br/>
+                                                        <textarea rows="12" cols="80" name="mess"></textarea><br/>
 
-                    </td>
+                                                    </td>
 
-                </tr>
+                                        </tr>
 
-                <tr>
+                                        <tr>
 
-                    <td>
+                                            <td>
 
-                        <input type="submit" value="Send">
+                                                <input type="submit" value="Send">
 
-                    </td>
+                                            </td>
 
-                    <td>
+                                            <td>
 
-                        <input type="reset" value="Reset">
+                                                <input type="reset" value="Reset">
 
-                    </td>
+                                            </td>
 
-                </tr>
+                                        </tr>
 
-            </table>
+                                        </table>
 
-        </form>
+                                        </form>
 
-    </body>
-
+                                        </body>
 </html>
