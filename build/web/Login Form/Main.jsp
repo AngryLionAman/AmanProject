@@ -210,7 +210,7 @@
                 document.getElementById("myDropdown").classList.toggle("show");
             }
 
-        // Close the dropdown if the user clicks outside of it
+            // Close the dropdown if the user clicks outside of it
             window.onclick = function (event) {
                 if (!event.target.matches('.dropbtn')) {
 
@@ -238,7 +238,7 @@
             <a href="#">Ansewer</a>
             <a href="#">Nodification</a>
 
-            <form class="example" action="SearchBar.jsp" style="margin:auto;max-width:300px">
+            <form class="example" action="SearchBar_s.jsp" style="margin:auto;max-width:300px">
                 <input type="text" placeholder="Search.." name="search">
                 <button type="submit"><i class="fa fa-search"></i></button>
             </form>
@@ -307,7 +307,7 @@
                             rs_fetch_topic = stmt_fetch_topic.executeQuery(p_fetch_topic);
                             while (rs_fetch_topic.next()) {
                                 topic_name = rs_fetch_topic.getString("topic_name");
-            topic_id = rs_fetch_topic.getInt("unique_id");%>
+                                topic_id = rs_fetch_topic.getInt("unique_id");%>
                     <li>[<%=topic_id%>] <a href="topic_detail.jsp?topic_id=<%=topic_id%>"><%=topic_name%></a></li>
                         <% }
                                 rs_fetch_topic.close();
@@ -373,66 +373,43 @@
                     </div>
                 </div><br>
                 <%
+                    Statement stmt1, stmt2 = null;
+                    Connection con1;
+                    ResultSet rs1, rs2;
+                    String name1 = null;
+                    String question, fname = null;
+                    int ide = 0;
+
                     try {
-                        Statement stmt_fetch_topic_again;
-                        Connection con_fetch_topic_again;
-                        ResultSet rs_fetch_topic_again;
-                        String topic_name_again;
 
                         Class.forName("com.mysql.jdbc.Driver");
-                        con_fetch_topic_again = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-                        stmt_fetch_topic_again = con_fetch_topic_again.createStatement();
-                        String p_fetch_topic_again = "select t.unique_id,t.topic_name "
-                                + "from topic t right join topic_followers_detail de "
-                                + "on t.unique_id = de.topic_id "
-                                + "where user_or_followers_id= '" + id_of_user + "'";
-                        rs_fetch_topic_again = stmt_fetch_topic_again.executeQuery(p_fetch_topic_again);
-                        while (rs_fetch_topic_again.next()) {
-                            topic_name = rs_fetch_topic_again.getString("topic_name");
-                            topic_id = rs_fetch_topic_again.getInt("unique_id");
-
-                            Statement stmt1, stmt2 = null;
-                            Connection con1;
-                            ResultSet rs1, rs2;
-                            String name1 = null;
-                            String question, fname = null;
-                            int ide = 0;
-
-                            try {
-
-                                Class.forName("com.mysql.jdbc.Driver");
-                                con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-                                stmt1 = con1.createStatement();
-                                String q = "select q.id,q.q_id,q.question "
-                                        + "from question q "
-                                        + "right join question_topic_tag qtt "
-                                        + "on q.q_id = qtt.question_id where tag_id='" + topic_id + "'";
-                                rs1 = stmt1.executeQuery(q);
-                                if (!rs1.next()) {
-                                    out.println("<br>ResultSet is Empty");
-                                } else {
-                                    question = rs1.getString("question");
-                                    ide = rs1.getInt("id");
-                                    int question_id = rs1.getInt("q_id");
-                                    stmt2 = con1.createStatement();
-                                    String T = "SELECT firstname FROM newuser WHERE id='" + ide + "' ";
-                                    rs2 = stmt2.executeQuery(T);
-                                    while (rs2.next()) {
-                                        fname = rs2.getString("firstname");
-                                        out.println("<div class=div1>");
-                                        out.println(question);
-                                        out.println("&nbsp;");
-                                        out.println("BY");
-                                        out.println("&nbsp;");
-                                        out.println(fname);
-                                        out.println("<br>");
-                                        out.println("<br>");
-                                        out.println("<br>");
-                                        out.println("&nbsp;");
+                        con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
+                        stmt1 = con1.createStatement();
+                        String q = "select DISTINCT q.id,q.q_id,q.question from question q right join question_topic_tag qtt on q.q_id = qtt.question_id where tag_id IN (select t.unique_id from topic t right join topic_followers_detail de on t.unique_id = de.topic_id where user_or_followers_id= '" + id_of_user + "')";
+                        rs1 = stmt1.executeQuery(q);
+                        while (rs1.next()) {
+                            question = rs1.getString("question");
+                            ide = rs1.getInt("id");
+                            int question_id = rs1.getInt("q_id");
+                            stmt2 = con1.createStatement();
+                            String T = "SELECT firstname FROM newuser WHERE id='" + ide + "' ";
+                            rs2 = stmt2.executeQuery(T);
+                            while (rs2.next()) {
+                                fname = rs2.getString("firstname");
+                                out.println("<div class=div1>");
+                                out.println(question);
+                                out.println("&nbsp;");
+                                out.println("BY");
+                                out.println("&nbsp;");
+                                out.println(fname);
+                                out.println("<br>");
+                                out.println("<br>");
+                                out.println("<br>");
+                                out.println("&nbsp;");
                 %>
                 <b><a href="Answer.jsp?Id=<%=rs1.getString("question")%>" >Answer</a></b>
                 <%
-                                      out.println("&nbsp;&nbsp;");%>
+                    out.println("&nbsp;&nbsp;");%>
 
                 <%
                     Statement stmt_count;
@@ -459,24 +436,18 @@
 
                 <button onclick="take_value('<%=question_id%>', '<%=id_of_user%>')">UpVote[<%=count_var%>]</button><p id="demo"></p>
                 <% out.println("&nbsp;&nbsp;");
-                                        out.println("</div>");
+                                    out.println("</div>");
 
-                                    }
                                 }
-
-                                stmt1.close();
-                                stmt2.close();
-                                con1.close();
-                            } catch (Exception e) {
-                                out.println("<br>Error Two :" + e);
                             }
+
+                            stmt1.close();
+                            stmt2.close();
+                            con1.close();
+                        } catch (Exception e) {
+                            out.println("<br>Error Two :" + e);
                         }
-                        rs_fetch_topic_again.close();
-                        stmt_fetch_topic_again.close();
-                        con_fetch_topic_again.close();
-                    } catch (Exception e) {
-                        out.println("Error Three : " + e);
-                    }
+           
                 %>
 
 

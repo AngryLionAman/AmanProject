@@ -33,7 +33,7 @@
             subject = request.getParameter("subj");
             feedback = request.getParameter("feed");
             froma = "cse13302.sbit@gmail.com";
-            password = "";
+            password = "alokankit";
             out.println(froma + password);
             to = mailid;
             //to="cse13302.sbit@gmail.com";

@@ -424,23 +424,18 @@
                         Class.forName("com.mysql.jdbc.Driver");
                         con_related_topic = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
                         stmt_related_topic = con_related_topic.createStatement();
-                        String p_related_topic = "select question_id from question_topic_tag where tag_id='" + topic_id_fetch + "'";
+                        String p_related_topic = "select DISTINCT "
+                                + "t.unique_id,t.topic_name from topic t "
+                                + "right join question_topic_tag qtt "
+                                + "on t.unique_id=qtt.tag_id where question_id "
+                                + "IN (select question_id from question_topic_tag where tag_id='" + topic_id_fetch + "')";
                         rs_related_topic = stmt_related_topic.executeQuery(p_related_topic);
                 %><ul class="a"><%
                     while (rs_related_topic.next()) {
-                        int QuestionId = rs_related_topic.getInt("question_id");
-                        Statement stmt_related_;
-                        ResultSet rs_related_;
-                        stmt_related_ = con_related_topic.createStatement();
-                        String p_related_ = "select t.unique_id,t.topic_name from topic t right join question_topic_tag qtt on t.unique_id=qtt.tag_id where question_id='" + QuestionId + "'";
-                        rs_related_ = stmt_related_.executeQuery(p_related_);
-                        while (rs_related_.next()) {
-                            int unique_id = rs_related_.getInt("unique_id");
-                            String topic_nameA = rs_related_.getString("topic_name");
+                         int unique_id = rs_related_topic.getInt("unique_id");
+                         String topic_nameA = rs_related_topic.getString("topic_name");
                     %><a href=""><li><%=topic_nameA%></li></a><%
-                                }
-                                stmt_related_.close();
-                                rs_related_.close();
+                                
                             }
                             out.println("</ul>");
                             stmt_related_topic.close();

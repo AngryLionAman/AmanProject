@@ -194,7 +194,7 @@
                 document.getElementById("myDropdown").classList.toggle("show");
             }
 
-        // Close the dropdown if the user clicks outside of it
+            // Close the dropdown if the user clicks outside of it
             window.onclick = function (event) {
                 if (!event.target.matches('.dropbtn')) {
 
@@ -218,12 +218,12 @@
         </div>
 
         <div class="topnav">
-            <a href="#">Home</a>
+            <a href="Main.jsp">Home</a>
             <a href="#">Ansewer</a>
             <a href="#">Nodification</a>
 
-            <form class="example" action="action_page.jsp" style="margin:auto;max-width:300px">
-                <input type="text" placeholder="Search.." name="search2">
+            <form class="example" action="SearchBar_s.jsp" style="margin:auto;max-width:300px">
+                <input type="text" placeholder="Search.." name="search">
                 <button type="submit"><i class="fa fa-search"></i></button>
             </form>
         </div>
@@ -247,15 +247,11 @@
                 <h2>Feeds</h2>
 
                 <ul class="a">
-                    <a href="OtherUserProfile.jsp?Q_value=Question"><li>Question</li></a>
-                    <a href="OtherUserProfile.jsp?Q_value=Answer"><li>Answer</li></a>
-                    <a href=""><li>Activity</li></a>
-                    <a href=""><li>Posts</li></a>
-                    <a href=""><li>Blogs</li></a>
-                    <a href=""><li>Followers</li></a>
-                    <a href=""><li>Following</li></a>
-                    <a href=""><li>Topic</li></a>
-                    <a href=""><li>Edits</li></a>
+                    <a href="SearchBar.jsp?Q_value=Question"><li>Question</li></a>
+                    <a href="SearchBar.jsp?Q_value=Answer"><li>Answer</li></a>
+                    <a href="SearchBar.jsp?Q_value=Topic"><li>Topic</li></a>
+                    <a href="SearchBar.jsp?Q_value=UserProfile"><li>UserProfile</li></a>
+                    <a href="SearchBar.jsp?Q_value=Blogs"><li>Blogs</li></a>
                 </ul>
             </div>
             <div class="column middle">
@@ -291,52 +287,20 @@
                         out.println("Unable to retrieve!!" + e);
                     }
                     //End printing user name  
-                    String SearchValue = request.getParameter("search");
+                %>
+
+
+                <%
+                    String SearchValue = (String) session.getAttribute("SearchVariable");
                     out.println(SearchValue);
-                %>
-
-                <%
-                    String Id_of_user = (String) session.getAttribute("Variable");
-                    try {
-                        Statement stmt_un;
-                        Connection con_un;
-                        ResultSet rs_un;
-                        String firstname, lastname, interest, Email, Language;
-                        int Id_of_users = 0;
-
-                        Class.forName("com.mysql.jdbc.Driver");
-                        con_un = DriverManager.getConnection("jdbc:mysql://localhost:3306/bharat", "root", null);
-                        stmt_un = con_un.createStatement();
-                        String p_un = "SELECT * FROM newuser WHERE id='" + Id_of_user + "'";
-                        rs_un = stmt_un.executeQuery(p_un);
-
-                        while (rs_un.next()) {
-                            Id_of_users = rs_un.getInt("ID");
-                            firstname = rs_un.getString("firstname");
-                            lastname = rs_un.getString("lastname");
-                            Email = rs_un.getString("email");
-                            interest = rs_un.getString("interests");
-                            Language = rs_un.getString("languages");
-                            out.print("<h3>*************Selected User Detail***************<h3>");
-                            out.print("<br><b>User id =</b>" + Id_of_users);
-                            out.print("<br><b>Full Name =</b>" + firstname + " " + lastname);
-                            out.print("<br><b>Email id =</b>" + Email);
-                            out.print("<br><b>Interests =</b>" + interest);
-                            out.print("<br><b>Language known =</b>" + Language);
-                        }
-                        stmt_un.close();
-                        con_un.close();
-                    } catch (Exception e) {
-                        out.println("Error = " + e);
+                    String ParametrVariable = request.getParameter("Q_value");
+                    if(ParametrVariable == null){
+                         ParametrVariable = "Question";
                     }
-                %>
-
-                <%
-                    if (request.getParameter("Q_value") != null) {
-                        try {
-                            if (request.getParameter("Q_value").equals("Question")) {
-                                out.print("<b>--------------------Question----------------------------</b>");
-
+                     if (ParametrVariable != null) {
+                        if (ParametrVariable.equals("Question")) {
+                            out.print("<b>--------------------Question----------------------------</b>");
+                            try {
                                 Statement stmt_q = null;
                                 Connection con_q;
                                 ResultSet rs_q;
@@ -345,7 +309,7 @@
                                 Class.forName("com.mysql.jdbc.Driver");
                                 con_q = DriverManager.getConnection("jdbc:mysql://localhost/bharat", "root", null);
                                 stmt_q = con_q.createStatement();
-                                String Q = "SELECT * FROM question WHERE id = '" + Id_of_user + "'";
+                                String Q = "SELECT * FROM question WHERE question LIKE '%" + SearchValue + "%'";
                                 rs_q = stmt_q.executeQuery(Q);
                                 int count = 1;
                                 while (rs_q.next()) {
@@ -356,12 +320,14 @@
 
                                 stmt_q.close();
                                 con_q.close();
+                            } catch (Exception e1) {
+                                out.println("Error in Question search : " + e1);
                             }
-
-                //Staring answer programming....................................................
-                            if (request.getParameter("Q_value").equals("Answer")) {
-                                out.print("<b>--------------------Answer----------------------------</b><br>");
-
+                        }
+                        //Staring answer programming....................................................
+                        if (ParametrVariable.equals("Answer")) {
+                            out.print("<b>--------------------Answer----------------------------</b><br>");
+                            try {
                                 Statement stmt_a = null, stmt_a2 = null;
                                 Connection con_a;
                                 ResultSet rs_a, rs_a2;
@@ -372,7 +338,7 @@
                                 con_a = DriverManager.getConnection("jdbc:mysql://localhost/bharat", "root", null);
                                 stmt_a = con_a.createStatement();
                                 stmt_a2 = con_a.createStatement();
-                                String Q_a = "SELECT * FROM answer WHERE Answer_by_id = '" + Id_of_user + "'";
+                                String Q_a = "SELECT * FROM answer WHERE answer LIKE '%" + SearchValue + "%'";
                                 rs_a = stmt_a.executeQuery(Q_a);
                                 int count = 1;
                                 while (rs_a.next()) {
@@ -386,16 +352,71 @@
                                     }
 
                                 }
-
-                                stmt_a2.close();
-                                stmt_a.close();
-                                con_a.close();
+                            } catch (Exception e2) {
+                                out.println("Error in Answer search : " + e2);
                             }
-                        } catch (Exception e) {
-                            out.println("Error = " + e);
                         }
+                        //Starting the topic search program
+
+                        if (ParametrVariable.equals("Topic")) {
+                            out.print("<b>--------------------Topic----------------------------</b>");
+                            try {
+                                Statement stmt_t = null;
+                                Connection con_t;
+                                ResultSet rs_t;
+                                String Topic_assgned_by_user;
+
+                                Class.forName("com.mysql.jdbc.Driver");
+                                con_t = DriverManager.getConnection("jdbc:mysql://localhost/bharat", "root", null);
+                                stmt_t = con_t.createStatement();
+                                String T = "SELECT * FROM topic WHERE topic_name LIKE '%" + SearchValue + "%'";
+                                rs_t = stmt_t.executeQuery(T);
+                                int count_ = 1;
+                                while (rs_t.next()) {
+                                    Topic_assgned_by_user = rs_t.getString("topic_name");
+                                    out.print("<br><br>" + count_++ + "<b>&nbsp;&nbsp;" + Topic_assgned_by_user + "</b>");
+
+                                }
+
+                                stmt_t.close();
+                                con_t.close();
+                            } catch (Exception e) {
+                                out.println("Error in Topic Search:" + e);
+                            }
+                        }
+              //Satting the userprofile search option
+              
+               if (ParametrVariable.equals("UserProfile")) {
+                            out.print("<b>--------------------Topic----------------------------</b>");
+                            try {
+                                Statement stmt_t = null;
+                                Connection con_t;
+                                ResultSet rs_t;
+                                String StoredUserFirstName,StoredUserLatName;
+
+                                Class.forName("com.mysql.jdbc.Driver");
+                                con_t = DriverManager.getConnection("jdbc:mysql://localhost/bharat", "root", null);
+                                stmt_t = con_t.createStatement();
+                                String T = "SELECT * FROM newuser WHERE firstname LIKE '%" + SearchValue + "%' OR lastname LIKE '%" + SearchValue + "%'";
+                                rs_t = stmt_t.executeQuery(T);
+                                int count_ = 1;
+                                while (rs_t.next()) {
+                                    StoredUserFirstName = rs_t.getString("firstname");
+                                    StoredUserLatName = rs_t.getString("lastname");
+                                    
+                                    out.print("<br><br>" + count_++ + "<b>&nbsp;&nbsp;" + StoredUserFirstName +" "+StoredUserLatName+ "</b>");
+
+                                }
+
+                                stmt_t.close();
+                                con_t.close();
+                            } catch (Exception e) {
+                                out.println("Error in Topic Search:" + e);
+                            }
+                        }
+                     
                     }//IF statement closed here
-                %>
+%>
 
                 <br>
 

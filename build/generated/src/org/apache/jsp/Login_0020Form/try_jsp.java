@@ -41,15 +41,12 @@ public final class try_jsp extends org.apache.jasper.runtime.HttpJspBase
       _jspx_out = out;
       _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
 
-      out.write("<html>\r\n");
-      out.write("    \r\n");
-      out.write("    <head>\r\n");
-      out.write("        <script class=\"ckeditor/ckeditor.js\"></script>\r\n");
-      out.write("    </head>\r\n");
-      out.write("    <body>\r\n");
-      out.write("        <textarea class=\"ckeditor\" name=\"editor\"></textarea>\r\n");
-      out.write("    </body>\r\n");
-      out.write("</html>");
+
+out.print(request.getServletPath());
+out.print(request.getRequestURI());
+//out.print(request.getRequest());
+out.print(request.getContextPath());
+
     } catch (Throwable t) {
       if (!(t instanceof SkipPageException)){
         out = _jspx_out;
