@@ -319,6 +319,13 @@
                         %>
                     <a href=""><li>This is for Example</li></a>
                 </ul>
+                    
+                <h2>Trending Topic</h2>
+
+                <ul class="a">
+                    
+                    <li><jsp:include page="TrendingTopic.jsp" /></li>
+                </ul>
             </div>
             <div class="column middle">
 
@@ -353,7 +360,7 @@
                                     </form>  
                                 </div>
 
-                                <div id="Paris" class="w3-container city">
+                                <div id="Paris" class="feefw3-container city">
                                     <h1>Paris</h1>
                                     <p>Paris is the capital of France.</p>
                                 </div>
@@ -455,12 +462,12 @@
             <div class="column side">
                 <h2>Set up account</h2>
                 <ul class="a">
-                    <a href=""><li>Visit your feed</li></a>
+                    <a href=""><li><jsp:include page="CompleteUserProfile.jsp" /></li></a>
                     <a href="Topic_Follow.jsp"><li>Follow more Topic</li></a>
                     <a href=""><li>Find Your friend on bharat.com</li></a>
                     <a href=""><li>Ask your first question</li></a>
                     <a href=""><li>Answer a Question</li></a>
-                    <a href=""><li>Update your profile</li></a>
+                    
                 </ul>
             </div>
         </div>
